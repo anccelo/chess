@@ -1,0 +1,10 @@
+D:\MyProjects\chess\chess-domain\src\main\java\com\angelolagreca\chess\domain\Chessboard.java
+D:\MyProjects\chess\chess-domain\src\main\java\com\angelolagreca\chess\domain\piece\Color.java
+D:\MyProjects\chess\chess-domain\src\main\java\com\angelolagreca\chess\domain\exception\InitializationException.java
+D:\MyProjects\chess\chess-domain\src\main\java\Main.java
+D:\MyProjects\chess\chess-domain\src\main\java\com\angelolagreca\chess\domain\Piece.java
+D:\MyProjects\chess\chess-domain\src\main\java\com\angelolagreca\chess\domain\exception\IllegalMovimentException.java
+D:\MyProjects\chess\chess-domain\src\main\java\com\angelolagreca\chess\domain\piece\King.java
+D:\MyProjects\chess\chess-domain\src\main\java\com\angelolagreca\chess\domain\Move.java
+D:\MyProjects\chess\chess-domain\src\main\java\com\angelolagreca\chess\domain\piece\Piece.java
+D:\MyProjects\chess\chess-domain\src\main\java\com\angelolagreca\chess\domain\Position.java
