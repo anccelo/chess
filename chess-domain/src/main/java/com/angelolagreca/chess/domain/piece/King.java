@@ -2,7 +2,6 @@ package com.angelolagreca.chess.domain.piece;
 
 import com.angelolagreca.chess.domain.Movement;
 import com.angelolagreca.chess.domain.Position;
-import com.angelolagreca.chess.domain.exception.IllegalPositionException;
 import com.angelolagreca.chess.domain.exception.InitializationException;
 import lombok.Getter;
 
@@ -16,19 +15,20 @@ public class King extends Piece {
         if (color == WHITE)
             this.position = new Position('E', 1);
         else if (color == BLACK)
-            position = new Position('E', 1);
+            position = new Position('E', 8);
         this.color = color;
 
     }
 
     @Override
-    public Position moveIn(Position newPosition) {
-
-        return null;
+    public void moveIn(Position newPosition) {
+        if (isAllowedMoveIn(newPosition))
+            this.position = newPosition;
     }
 
     @Override
-    public boolean isMovementAllowed(Position newPosition)  {
+    public boolean isAllowedMoveIn(Position newPosition) {
+
         return Movement.kingMovemet(this.position, newPosition);
     }
 
