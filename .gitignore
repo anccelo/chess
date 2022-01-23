@@ -4,13 +4,11 @@
 .settings/
 
 # Intellij
+.target/
 .idea/
 *.iml
 *.iws
 *.lst
-
-# Mac
-.DS_Store
 
 # Maven
 log/
