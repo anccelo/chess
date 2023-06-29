@@ -4,8 +4,8 @@
 .settings/
 
 # Intellij
-.target/
-.idea/
+.target
+.idea
 *.iml
 *.iws
 *.lst
