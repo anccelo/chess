@@ -16,7 +16,7 @@ public class Chessboard {
 
     private final Map<Position, Piece> cheesboard = new LinkedHashMap<>();
 
-    public Chessboard() throws InitializationException {
+    public Chessboard() {
         for (int i = 1; i < 9; i++) {
             for (char c = 'A'; c < 'I'; c++) {
                 cheesboard.put(new Position(c, i), new EmptyPiece());

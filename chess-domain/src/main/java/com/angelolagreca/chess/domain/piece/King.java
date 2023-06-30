@@ -11,7 +11,7 @@ import static com.angelolagreca.chess.domain.piece.Color.WHITE;
 @Getter
 public class King extends Piece {
 
-    public King(Color color) throws InitializationException {
+    public King(Color color)  {
         if (color == WHITE)
             this.position = new Position('E', 1);
         else if (color == BLACK)
