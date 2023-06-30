@@ -11,7 +11,7 @@
 
     <modules>
         <module>chess-domain</module>
-        <module>chees-application</module>
+        <module>chess-application</module>
     </modules>
 
     <properties>
