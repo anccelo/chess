@@ -1,56 +1,24 @@
 package com.angelolagreca.chess.domain;
 
 
-import com.angelolagreca.chess.domain.exception.IllegalPositionException;
-import com.angelolagreca.chess.domain.exception.InitializationException;
-import com.angelolagreca.chess.domain.piece.EmptyPiece;
-import com.angelolagreca.chess.domain.piece.Piece;
+import com.angelolagreca.chess.domain.piece.PieceEnum;
 import lombok.Getter;
 
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import static com.angelolagreca.chess.domain.piece.PieceEnum.EMPTY;
 
 @Getter
 public class Chessboard {
 
-    private final Map<Position, Piece> cheesboard = new LinkedHashMap<>();
+    private final Map<PositionEnum, PieceEnum> cheesboard = new LinkedHashMap<>();
 
     public Chessboard() {
-        for (int i = 1; i < 9; i++) {
-            for (char c = 'A'; c < 'I'; c++) {
-                cheesboard.put(new Position(c, i), new EmptyPiece());
-            }
+        for (PositionEnum positionEnum : PositionEnum.values()
+        ) {
+            cheesboard.put(positionEnum, EMPTY);
         }
-    }
-
-    public void isAChessBoard(Position position) throws IllegalPositionException {
-        if (position.getX() < 'A' || position.getX() > 'H'
-                || position.getY() < 1 || position.getY() > 8)
-            throw new IllegalPositionException("Whit this moviment you are out of chessBoard.");
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        Iterator<Map.Entry<Position, Piece>> iter = cheesboard.entrySet().iterator();
-        while (iter.hasNext()) {
-
-            Map.Entry<Position, Piece> entry = iter.next();
-            if (entry.getKey().getX() == 'H') {
-                sb.append(entry.getKey());
-                sb.append('=');
-                sb.append(entry.getValue());
-                sb.append("\n");
-            } else {
-                sb.append(entry.getKey());
-                sb.append('=');
-                sb.append(entry.getValue());
-                sb.append(',').append(' ');
-            }
-        }
-        return sb.toString();
-
     }
 
 

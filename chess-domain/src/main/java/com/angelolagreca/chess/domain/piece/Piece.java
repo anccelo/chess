@@ -7,6 +7,8 @@ import lombok.Getter;
 @Getter
 public abstract class Piece  {
 
+
+
     protected Color color;
     protected Position position;
 

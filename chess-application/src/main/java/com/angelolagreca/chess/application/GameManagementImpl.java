@@ -1,24 +1,25 @@
 package com.angelolagreca.chess.application;
 
-import com.angelolagreca.chess.domain.*;
-import com.angelolagreca.chess.domain.piece.*;
+import com.angelolagreca.chess.domain.Game;
+import com.angelolagreca.chess.domain.PositionEnum;
+import com.angelolagreca.chess.domain.piece.PieceEnum;
+import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.Map;
 
-import static com.angelolagreca.chess.domain.piece.Color.BLACK;
-import static com.angelolagreca.chess.domain.piece.Color.WHITE;
+import static com.angelolagreca.chess.domain.piece.PieceEnum.BLACK_KING;
+import static com.angelolagreca.chess.domain.piece.PieceEnum.WHITE_KING;
 
-public class GameManagementImpl implements GameManagement{
+@Component
+public class GameManagementImpl implements GameManagement {
     @Override
     public Game init() {
 
         Game game = new Game();
 
-        Map<Position, Piece> chessboardOfGame = game.getChessboard().getCheesboard();
-        Piece whiteKing = new King(WHITE);
-        Piece blackKing = new King(BLACK);
-        chessboardOfGame.put(whiteKing.getPosition(), whiteKing);
-        chessboardOfGame.put(blackKing.getPosition(), blackKing);
+        Map<PositionEnum, PieceEnum> chessboardOfGame = game.getChessboard().getCheesboard();
+        chessboardOfGame.put(PositionEnum.E1, WHITE_KING);
+        chessboardOfGame.put(PositionEnum.E8, BLACK_KING);
 
         return game;
     }
