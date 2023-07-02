@@ -3,7 +3,7 @@ package com.angelolagreca.chess.domain;
 import lombok.Getter;
 
 @Getter
-public enum PositionEnum {
+public enum ChessboardPosition {
 
     A1(1, 1), B1(2,1), C1(3,1),D1(4,1),E1(5,1),F1(6,1),G1(7,1),H1(8,1),
     A2(1, 2), B2(2,2), C2(3,2),D2(4,2),E2(5,2),F2(6,2),G2(7,2),H2(8,2),
@@ -17,7 +17,7 @@ public enum PositionEnum {
     private final int x;
     private final int y;
 
-    PositionEnum(int x, int y) {
+    ChessboardPosition(int x, int y) {
         this.x = x;
         this.y = y;
     }
