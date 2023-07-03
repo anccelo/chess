@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import static com.angelolagreca.chess.domain.piece.Color.*;
 
@@ -15,13 +16,13 @@ import static com.angelolagreca.chess.domain.piece.Color.*;
 @NoArgsConstructor
 public class Game {
 
+    String id = UUID.randomUUID().toString();
 
     private Player playerOne = new Player(WHITE);
     private Player playerTwo = new Player(BLACK);
 
     private Map<ChessboardPosition, TypeOfPiece > chessboardPieceMap = new LinkedHashMap<>();
-    private Map<Integer, Map<ChessboardPosition, TypeOfPiece >> storicoGameMap;
-
+//    private Map<Integer, Map<ChessboardPosition, TypeOfPiece >> storicoGameMap;
 
 
 }

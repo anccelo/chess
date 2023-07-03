@@ -2,6 +2,8 @@ package com.angelolagreca.chess.application;
 
 import com.angelolagreca.chess.domain.ChessboardPosition;
 import com.angelolagreca.chess.domain.Game;
+import com.angelolagreca.chess.domain.Movement;
+import com.angelolagreca.chess.domain.piece.TypeOfPiece;
 import org.springframework.stereotype.Component;
 
 import static com.angelolagreca.chess.domain.piece.TypeOfPiece.*;
@@ -11,21 +13,50 @@ import static com.angelolagreca.chess.domain.piece.TypeOfPiece.*;
 public class GameManagementImpl implements GameManagement {
 
     @Override
-    public Game init() {
+    public Game init()  {
 
         Game game = new Game();
 
-
-        for (ChessboardPosition chessboardPosition : ChessboardPosition.values()
-        ) {
+        for (ChessboardPosition chessboardPosition : ChessboardPosition.values()) {
             game.getChessboardPieceMap().put(chessboardPosition, EMPTY);
         }
-
         initWhiteTeam(game);
         initBlackTeam(game);
 
         return game;
     }
+
+    @Override
+    public Game playerMove(Game game, ChessboardPosition oldPosition, ChessboardPosition newPosition) throws Exception {
+        //determina nella vecchia posizione che piece c'é:
+        TypeOfPiece pieceCheSiEdecisoDiMuovere = deterimaIlPezzoCheSiVuoleMuovere(game, oldPosition);
+        //sposta nella nuova posizione
+        muoviIlPezzo(game, oldPosition, newPosition, pieceCheSiEdecisoDiMuovere);
+        //salva
+
+        return game;
+    }
+
+    private static TypeOfPiece deterimaIlPezzoCheSiVuoleMuovere(Game game, ChessboardPosition oldPoistion) {
+        return game.getChessboardPieceMap().get(oldPoistion);
+
+    }
+
+    private static void muoviIlPezzo(Game game, ChessboardPosition oldPoistion, ChessboardPosition newPosition,
+                                     TypeOfPiece pieceCheSiEdecisoDiMuovere) throws Exception {
+        checkIfMovimentIsPossibol(pieceCheSiEdecisoDiMuovere, oldPoistion, newPosition);
+        game.getChessboardPieceMap().put(oldPoistion, EMPTY);
+        game.getChessboardPieceMap().put(newPosition, pieceCheSiEdecisoDiMuovere);
+    }
+
+    private static void checkIfMovimentIsPossibol(TypeOfPiece pieceCheSiEdecisoDiMuovere, ChessboardPosition oldPoistion,
+                                                  ChessboardPosition newPosition) throws Exception {
+        Movement movement = new Movement(pieceCheSiEdecisoDiMuovere);
+        if (!movement.isAllowed(oldPoistion, newPosition))
+            throw new Exception("il movimento non é possibile");
+
+    }
+
 
     private static void initBlackTeam(Game game) {
         game.getChessboardPieceMap().put(ChessboardPosition.A8, BLACK_ROOK);

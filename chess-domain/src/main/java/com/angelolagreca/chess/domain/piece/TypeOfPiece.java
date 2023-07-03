@@ -1,7 +1,8 @@
 package com.angelolagreca.chess.domain.piece;
 
-public enum TypeOfPiece {
+import com.angelolagreca.chess.domain.Movement;
 
+public enum TypeOfPiece {
 
     EMPTY,
     WHITE_KING,
@@ -15,7 +16,10 @@ public enum TypeOfPiece {
     WHITE_ROOK,
     BLACK_ROOK,
     WHITE_PAWN,
-    BLACK_PAWN,
+    BLACK_PAWN;
+
+
+
 
 
 
