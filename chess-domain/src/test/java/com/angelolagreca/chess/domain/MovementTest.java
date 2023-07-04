@@ -5,44 +5,55 @@ import org.junit.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 
-import static com.angelolagreca.chess.domain.Chessboard.A1;
+import static com.angelolagreca.chess.domain.Chessboard.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @RunWith(JUnit4.class)
 public class MovementTest {
+
+    private Chessboard initialPoistion;
+    private Chessboard finalPosition;
 
     @Test
     public void when_king_tries_move_without_changing_position_it_should_return_false() {
 
         Movement movement = new Movement(TypeOfPiece.WHITE_KING);
 
-        boolean actual = movement.isAllowed(A1, A1);
+        initialPoistion = A1;
+        finalPosition = A1;
+
+        boolean actual = movement.isAllowed(initialPoistion, finalPosition);
         assertFalse(actual);
 
     }
-//
-//    @Test
-//    public void kingMovemet_should_return_false_whene_moving_for_two_orizontal_case() {
-//        //Arrange
-//        initialPosition = new Position('A', 3);
-//        finalPosition = new Position('C', 3);
-//
-//        //act & assert
-////        assertFalse(Movement.kingMovemet(initialPosition, finalPosition));
-//
-//    }
-//
-//    @Test
-//    public void kingMovemet_should_return_false_whene_moving_for_two_vertical_case() {
-//        //Arrange
-//        initialPosition = new Position('A', 1);
-//        finalPosition = new Position('A', 3);
-//
-//        //act & assert
-////        assertFalse(Movement.kingMovemet(initialPosition, finalPosition));
-//
-//    }
-//
+
+    @Test
+    public void kingMovement_should_return_false_when_moving_for_two_horizontal_case() {
+        //Arrange
+        initialPoistion = E8;
+        finalPosition = C8;
+        Movement movement = new Movement(TypeOfPiece.WHITE_KING);
+
+        boolean actual = movement.isAllowed(initialPoistion, finalPosition);
+
+        //act & assert
+        assertFalse(actual);
+
+    }
+
+    @Test
+    public void kingMovemet_should_return_false_whene_moving_for_two_vertical_case() {
+    initialPoistion = E8;
+    finalPosition = E6;
+    Movement movement = new Movement(TypeOfPiece.WHITE_KING);
+
+    boolean actual = movement.isAllowed(initialPoistion, finalPosition);
+
+    //act & assert
+    assertFalse(actual);
+
+    }
+
 //    @Test
 //    public void kingMovemet_should_return_false_whene_initial_and_new_positions_are_same() {
 //        //Arrange

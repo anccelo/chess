@@ -1,6 +1,6 @@
 package com.angelolagreca.chess.domain;
 
-import com.angelolagreca.chess.domain.piece.TypeOfPiece;
+import com.angelolagreca.chess.domain.piece.*;
 
 public class Movement {
 
@@ -106,8 +106,8 @@ public class Movement {
     }
 
     private boolean knightMovemet(Chessboard actualPosition, Chessboard newPosition) {
-        if (itHasntMoved(actualPosition, newPosition)) return false;
-
+        if (itHasntMoved(actualPosition, newPosition))
+            return false;
         int checkX = Math.abs(actualPosition.getX() - newPosition.getX());
         int checkY = Math.abs(actualPosition.getY() - newPosition.getY());
 

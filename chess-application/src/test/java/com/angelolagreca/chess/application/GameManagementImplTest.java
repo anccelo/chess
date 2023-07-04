@@ -5,8 +5,8 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
 
-import static com.angelolagreca.chess.domain.Chessboard.E1;
-import static com.angelolagreca.chess.domain.piece.TypeOfPiece.WHITE_KING;
+import static com.angelolagreca.chess.domain.Chessboard.*;
+import static com.angelolagreca.chess.domain.piece.TypeOfPiece.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -21,6 +21,9 @@ class GameManagementImplTest {
         Game actual = gameManagement.init();
 
         assertEquals(actual.getChessboardPieceMap().get(E1), WHITE_KING);
+        assertEquals(actual.getChessboardPieceMap().get(A1), WHITE_ROOK);
+        assertEquals(actual.getChessboardPieceMap().get(B8), BLACK_KNIGHT);
+        assertEquals(actual.getChessboardPieceMap().get(D7), BLACK_PAWN);
     }
 
 }
