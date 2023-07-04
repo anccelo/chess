@@ -1,20 +1,19 @@
 package com.angelolagreca.chess.application;
 
-import com.angelolagreca.chess.domain.*;
-import org.junit.jupiter.api.*;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.boot.test.context.*;
+import com.angelolagreca.chess.domain.Game;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static com.angelolagreca.chess.domain.Chessboard.*;
 import static com.angelolagreca.chess.domain.piece.TypeOfPiece.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
 @SpringBootTest(classes = GameManagementImpl.class)
 class GameManagementImplTest {
 
     @Autowired
-    private GameManagementImpl gameManagement;
+    GameManagementImpl gameManagement;
 
     @Test
     void test() {
