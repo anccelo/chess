@@ -25,8 +25,8 @@ public class GameController {
     public @ResponseBody ResponseEntity<Game> move(
             @RequestBody Game game,
             @PathVariable Color color,
-            @PathVariable ChessboardPosition oldPosition,
-            @PathVariable ChessboardPosition newPosition) throws Exception {
+            @PathVariable Chessboard oldPosition,
+            @PathVariable Chessboard newPosition) throws Exception {
 //        ChessboardPosition oldPoistionEnum = ChessboardPosition.valueOf(oldPosition);
 //        ChessboardPosition newPositionEnum = ChessboardPosition.valueOf(newPosition);
         Game gameEvolution = gameManagement.playerMove(game, oldPosition, newPosition);

@@ -6,7 +6,7 @@ public interface GameManagement {
 
     Game init() throws Exception;
 
-    Game playerMove(Game game, ChessboardPosition oldPosition, ChessboardPosition newPosition) throws Exception;
+    Game playerMove(Game game, Chessboard oldPosition, Chessboard newPosition) throws Exception;
 
 
 }

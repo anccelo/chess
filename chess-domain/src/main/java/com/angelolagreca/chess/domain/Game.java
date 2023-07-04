@@ -21,7 +21,7 @@ public class Game {
     private Player playerOne = new Player(WHITE);
     private Player playerTwo = new Player(BLACK);
 
-    private Map<ChessboardPosition, TypeOfPiece > chessboardPieceMap = new LinkedHashMap<>();
+    private Map<Chessboard, TypeOfPiece > chessboardPieceMap = new LinkedHashMap<>();
 //    private Map<Integer, Map<ChessboardPosition, TypeOfPiece >> storicoGameMap;
 
 
