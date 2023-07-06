@@ -28,6 +28,16 @@ public class PawnMovementTest {
     }
 
     @Test
+    public void blackPawnMovement_should_return_false_when_stay_in_the_same_position() {
+        movement = new Movement(BLACK_PAWN);
+        initialPoistion = G2;
+        finalPosition = G2;
+
+        boolean actual = movement.isAllowed(initialPoistion, finalPosition);
+        assertFalse(actual);
+    }
+
+    @Test
     public void whitePawnMovement_should_return_false_when_moving_horizontally() {
         movement = new Movement(WHITE_PAWN);
         initialPoistion = E2;

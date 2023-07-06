@@ -2,26 +2,24 @@ package com.angelolagreca.chess.domain.piece;
 
 import com.angelolagreca.chess.domain.Movement;
 
+import static com.angelolagreca.chess.domain.piece.Color.*;
+
 public enum TypeOfPiece {
 
-    EMPTY,
-    WHITE_KING,
-    BLACK_KING,
-    WHITE_QUEEN,
-    BLACK_QUEEN,
-    WHITE_BISHOP,
-    BLACK_BISHOP,
-    WHITE_KNIGHT,
-    BLACK_KNIGHT,
-    WHITE_ROOK,
-    BLACK_ROOK,
-    WHITE_PAWN,
-    BLACK_PAWN;
+    EMPTY(NO_COLOR),
+    WHITE_KING(WHITE),
+    BLACK_KING(BLACK),
+    WHITE_QUEEN(WHITE),
+    BLACK_QUEEN(BLACK),
+    WHITE_BISHOP(WHITE),
+    BLACK_BISHOP(BLACK),
+    WHITE_KNIGHT(WHITE),
+    BLACK_KNIGHT(BLACK),
+    WHITE_ROOK(WHITE),
+    BLACK_ROOK(BLACK),
+    WHITE_PAWN(WHITE),
+    BLACK_PAWN(BLACK);
 
-
-
-
-
-
-
+    TypeOfPiece(Color color) {
+    }
 }
