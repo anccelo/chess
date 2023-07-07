@@ -16,13 +16,12 @@ import static com.angelolagreca.chess.domain.piece.Color.*;
 @NoArgsConstructor
 public class Game {
 
-    String id = UUID.randomUUID().toString();
+    private final String id = UUID.randomUUID().toString();
 
     private Player playerOne = new Player(WHITE);
     private Player playerTwo = new Player(BLACK);
 
     private Map<Chessboard, TypeOfPiece > chessboardPieceMap = new LinkedHashMap<>();
-//    private Map<Integer, Map<ChessboardPosition, TypeOfPiece >> storicoGameMap;
 
 
 }
