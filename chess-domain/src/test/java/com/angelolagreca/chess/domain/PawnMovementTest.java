@@ -16,10 +16,11 @@ public class PawnMovementTest {
     private Chessboard initialPoistion;
     private Chessboard finalPosition;
     private Movement movement;
+    private final Game game = new Game();
 
     @Test
     public void whitePawnMovement_should_return_false_when_stay_in_the_same_position() {
-        movement = new Movement(WHITE_PAWN);
+        movement = new Movement(WHITE_PAWN,game);
         initialPoistion = G6;
         finalPosition = G6;
 
@@ -29,7 +30,7 @@ public class PawnMovementTest {
 
     @Test
     public void blackPawnMovement_should_return_false_when_stay_in_the_same_position() {
-        movement = new Movement(BLACK_PAWN);
+        movement = new Movement(BLACK_PAWN, game);
         initialPoistion = G2;
         finalPosition = G2;
 
@@ -39,7 +40,7 @@ public class PawnMovementTest {
 
     @Test
     public void whitePawnMovement_should_return_false_when_moving_horizontally() {
-        movement = new Movement(WHITE_PAWN);
+        movement = new Movement(WHITE_PAWN, game);
         initialPoistion = E2;
         finalPosition = D2;
 
@@ -51,7 +52,7 @@ public class PawnMovementTest {
     public void whitePawnMovement_should_return_false_when_moving_vertically_for_two_position_from_not_start_position() {
         initialPoistion = D3;
         finalPosition = D5;
-        movement = new Movement(WHITE_PAWN);
+        movement = new Movement(WHITE_PAWN,game);
 
         boolean actual = movement.isAllowed(initialPoistion, finalPosition);
         assertFalse(actual);
@@ -62,7 +63,7 @@ public class PawnMovementTest {
     public void whitePawnMovement_should_return_false_when_there_is_a_backward_movement() {
         initialPoistion = D3;
         finalPosition = D2;
-        movement = new Movement(WHITE_PAWN);
+        movement = new Movement(WHITE_PAWN, game);
 
         boolean actual = movement.isAllowed(initialPoistion, finalPosition);
         assertFalse(actual);
@@ -73,7 +74,7 @@ public class PawnMovementTest {
         initialPoistion = D2;
         finalPosition = D5;
 
-        movement = new Movement(WHITE_PAWN);
+        movement = new Movement(WHITE_PAWN, game);
 
         boolean actual = movement.isAllowed(initialPoistion, finalPosition);
         assertFalse(actual);
@@ -84,7 +85,7 @@ public class PawnMovementTest {
         initialPoistion = D3;
         finalPosition = D4;
 
-        movement = new Movement(WHITE_PAWN);
+        movement = new Movement(WHITE_PAWN, game);
 
         boolean actual = movement.isAllowed(initialPoistion, finalPosition);
         assertTrue(actual);
@@ -95,7 +96,7 @@ public class PawnMovementTest {
         initialPoistion = D2;
         finalPosition = D4;
 
-        movement = new Movement(WHITE_PAWN);
+        movement = new Movement(WHITE_PAWN, game);
 
         boolean actual = movement.isAllowed(initialPoistion, finalPosition);
         assertTrue(actual);
@@ -106,7 +107,7 @@ public class PawnMovementTest {
     public void BlackPawnMovement_should_return_false_when_moving_horizontally() {
         initialPoistion = D7;
         finalPosition = E7;
-        movement = new Movement(BLACK_PAWN);
+        movement = new Movement(BLACK_PAWN, game);
 
         boolean actual = movement.isAllowed(initialPoistion, finalPosition);
         assertFalse(actual);
@@ -116,7 +117,7 @@ public class PawnMovementTest {
     public void blackPawnMovement_should_return_false_when_moving_vertically_for_two_position_from_not_start_position() {
         initialPoistion = D5;
         finalPosition = D3;
-        movement = new Movement(BLACK_PAWN);
+        movement = new Movement(BLACK_PAWN, game);
 
         boolean actual = movement.isAllowed(initialPoistion, finalPosition);
         assertFalse(actual);
@@ -126,7 +127,7 @@ public class PawnMovementTest {
     public void blackPawnMovement_should_return_true_when_moving_just_vertically_for_only_one_position() {
         initialPoistion = D7;
         finalPosition = D6;
-        movement = new Movement(BLACK_PAWN);
+        movement = new Movement(BLACK_PAWN,game);
 
         boolean actual = movement.isAllowed(initialPoistion, finalPosition);
         assertTrue(actual);
@@ -137,7 +138,7 @@ public class PawnMovementTest {
         initialPoistion = B7;
         finalPosition = B5;
 
-        movement = new Movement(BLACK_PAWN);
+        movement = new Movement(BLACK_PAWN, game);
 
         boolean actual = movement.isAllowed(initialPoistion, finalPosition);
         assertTrue(actual);

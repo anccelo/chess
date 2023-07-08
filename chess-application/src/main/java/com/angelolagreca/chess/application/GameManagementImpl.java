@@ -12,7 +12,7 @@ import static com.angelolagreca.chess.domain.piece.TypeOfPiece.*;
 public class GameManagementImpl implements GameManagement {
 
     @Override
-    public Game init()  {
+    public Game init() {
 
         Game game = new Game();
 
@@ -30,7 +30,7 @@ public class GameManagementImpl implements GameManagement {
         //determina nella vecchia posizione che piece c'é:
         TypeOfPiece pieceCheSiEdecisoDiMuovere = deterimaIlPezzoCheSiVuoleMuovere(game, oldPosition);
         //sposta nella nuova posizione
-        muoviIlPezzo(game, oldPosition, newPosition, pieceCheSiEdecisoDiMuovere);
+        moveThePiece(game, oldPosition, newPosition, pieceCheSiEdecisoDiMuovere);
         //salva
 
         return game;
@@ -41,16 +41,16 @@ public class GameManagementImpl implements GameManagement {
 
     }
 
-    private static void muoviIlPezzo(Game game, Chessboard oldPoistion, Chessboard newPosition,
+    private static void moveThePiece(Game game, Chessboard oldPoistion, Chessboard newPosition,
                                      TypeOfPiece pieceCheSiEdecisoDiMuovere) throws Exception {
-        checkIfMovimentIsPossibol(pieceCheSiEdecisoDiMuovere, oldPoistion, newPosition);
+        checkIfMovimentIsPossibol(pieceCheSiEdecisoDiMuovere, game, oldPoistion, newPosition);
         game.getChessboardPieceMap().put(oldPoistion, EMPTY);
         game.getChessboardPieceMap().put(newPosition, pieceCheSiEdecisoDiMuovere);
     }
 
-    private static void checkIfMovimentIsPossibol(TypeOfPiece pieceCheSiEdecisoDiMuovere, Chessboard oldPoistion,
+    private static void checkIfMovimentIsPossibol(TypeOfPiece pieceCheSiEdecisoDiMuovere, Game game, Chessboard oldPoistion,
                                                   Chessboard newPosition) throws Exception {
-        Movement movement = new Movement(pieceCheSiEdecisoDiMuovere);
+        Movement movement = new Movement(pieceCheSiEdecisoDiMuovere, game);
         if (!movement.isAllowed(oldPoistion, newPosition))
             throw new Exception("il movimento non é possibile");
 

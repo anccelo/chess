@@ -1,7 +1,5 @@
 package com.angelolagreca.chess.domain.piece;
 
-import com.angelolagreca.chess.domain.Movement;
-
 import static com.angelolagreca.chess.domain.piece.Color.*;
 
 public enum TypeOfPiece {
@@ -20,6 +18,13 @@ public enum TypeOfPiece {
     WHITE_PAWN(WHITE),
     BLACK_PAWN(BLACK);
 
+    private final Color color;
+
     TypeOfPiece(Color color) {
+        this.color = color;
+    }
+
+    public Color getColor() {
+        return color;
     }
 }

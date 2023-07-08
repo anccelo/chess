@@ -1,13 +1,16 @@
 package com.angelolagreca.chess.domain;
 
+import com.angelolagreca.chess.domain.piece.Color;
 import com.angelolagreca.chess.domain.piece.TypeOfPiece;
 
 public class Movement {
 
     private final TypeOfPiece typeOfPiece;
+    private final Game actualGame;
 
-    public Movement(TypeOfPiece typeOfPiece) {
+    public Movement(TypeOfPiece typeOfPiece, Game actualGame) {
         this.typeOfPiece = typeOfPiece;
+        this.actualGame = actualGame;
     }
 
 
@@ -37,15 +40,25 @@ public class Movement {
         }
     }
 
-    private boolean kingMovement(Chessboard actualPosition, Chessboard newPosition) {
-        if (itHasntMoved(actualPosition, newPosition)) return false;
+    private boolean kingMovement(Chessboard actualPosition, Chessboard targetPosition) {
+        if (itHasntMoved(actualPosition, targetPosition)) return false;
+        if (isTargetPositionIsOccupiedByAPieceOfItsOwnColour(actualPosition, targetPosition)) return false;
 
-        int checkX = Math.abs(actualPosition.getX() - newPosition.getX());
-        int checkY = Math.abs(actualPosition.getY() - newPosition.getY());
+        int checkX = Math.abs(actualPosition.getX() - targetPosition.getX());
+        int checkY = Math.abs(actualPosition.getY() - targetPosition.getY());
 
         if (checkX > 1 || checkY > 1)
             return checkX != 0 && checkY != 0;
         return true;
+    }
+
+    private boolean isTargetPositionIsOccupiedByAPieceOfItsOwnColour(Chessboard actualPosition,
+                                                                     Chessboard targetPosition) {
+        Color colorOfPieceInGame = actualGame.getChessboardPieceMap().get(actualPosition).getColor();
+        Color colorOfPieceInTargetPosition = actualGame.getChessboardPieceMap().get(targetPosition).getColor();
+
+        return colorOfPieceInGame.equals(colorOfPieceInTargetPosition);
+
     }
 
     private boolean whitePawnMovement(Chessboard actualPosition, Chessboard newPosition) {
