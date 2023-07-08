@@ -3,6 +3,7 @@ package com.angelolagreca.api;
 
 import com.angelolagreca.chess.application.*;
 import com.angelolagreca.chess.domain.*;
+import com.angelolagreca.chess.domain.exception.PieceMovementException;
 import com.angelolagreca.chess.domain.piece.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
@@ -26,15 +27,13 @@ public class GameController {
             @RequestBody Game game,
             @PathVariable Color color,
             @PathVariable Chessboard oldPosition,
-            @PathVariable Chessboard newPosition) throws Exception {
-//        ChessboardPosition oldPoistionEnum = ChessboardPosition.valueOf(oldPosition);
-//        ChessboardPosition newPositionEnum = ChessboardPosition.valueOf(newPosition);
+            @PathVariable Chessboard newPosition) throws PieceMovementException {
         Game gameEvolution = gameManagement.playerMove(game, oldPosition, newPosition);
         return new ResponseEntity<>(gameEvolution, HttpStatus.OK);
     }
 
     @GetMapping(value = "init", produces = "application/json")
-    public Game init() throws Exception {
+    public Game init()  {
         return gameManagement.init();
     }
 

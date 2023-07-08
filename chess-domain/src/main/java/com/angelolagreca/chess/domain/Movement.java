@@ -24,13 +24,13 @@ public class Movement {
                 return true;
             case WHITE_BISHOP:
             case BLACK_BISHOP:
-                return bishopMovemet(oldPoistion, newPosition);
+                return bishopMovement(oldPoistion, newPosition);
             case WHITE_KNIGHT:
             case BLACK_KNIGHT:
-                return knightMovemet(oldPoistion, newPosition);
+                return knightMovement(oldPoistion, newPosition);
             case WHITE_ROOK:
             case BLACK_ROOK:
-                return rookMovemet(oldPoistion, newPosition);
+                return rookMovement(oldPoistion, newPosition);
             case WHITE_PAWN:
                 return whitePawnMovement(oldPoistion, newPosition);
             case BLACK_PAWN:
@@ -40,9 +40,17 @@ public class Movement {
         }
     }
 
+    public boolean isTargetPositionOccupiedByAPieceOfItsOwnColour(Chessboard actualPosition,
+                                                                  Chessboard targetPosition) {
+        Color colorOfPieceInGame = actualGame.getChessboardPieceMap().get(actualPosition).getColor();
+        Color colorOfPieceInTargetPosition = actualGame.getChessboardPieceMap().get(targetPosition).getColor();
+
+        return colorOfPieceInGame.equals(colorOfPieceInTargetPosition);
+
+    }
+
     private boolean kingMovement(Chessboard actualPosition, Chessboard targetPosition) {
         if (itHasntMoved(actualPosition, targetPosition)) return false;
-        if (isTargetPositionIsOccupiedByAPieceOfItsOwnColour(actualPosition, targetPosition)) return false;
 
         int checkX = Math.abs(actualPosition.getX() - targetPosition.getX());
         int checkY = Math.abs(actualPosition.getY() - targetPosition.getY());
@@ -50,15 +58,6 @@ public class Movement {
         if (checkX > 1 || checkY > 1)
             return checkX != 0 && checkY != 0;
         return true;
-    }
-
-    private boolean isTargetPositionIsOccupiedByAPieceOfItsOwnColour(Chessboard actualPosition,
-                                                                     Chessboard targetPosition) {
-        Color colorOfPieceInGame = actualGame.getChessboardPieceMap().get(actualPosition).getColor();
-        Color colorOfPieceInTargetPosition = actualGame.getChessboardPieceMap().get(targetPosition).getColor();
-
-        return colorOfPieceInGame.equals(colorOfPieceInTargetPosition);
-
     }
 
     private boolean whitePawnMovement(Chessboard actualPosition, Chessboard newPosition) {
@@ -122,7 +121,7 @@ public class Movement {
         return actualPosition.getY() == 7;
     }
 
-    private boolean bishopMovemet(Chessboard actualPosition, Chessboard newPosition) {
+    private boolean bishopMovement(Chessboard actualPosition, Chessboard newPosition) {
         if (itHasntMoved(actualPosition, newPosition)) return false;
 
         int checkX = Math.abs(actualPosition.getX() - newPosition.getX());
@@ -131,7 +130,7 @@ public class Movement {
     }
 
 
-    private boolean rookMovemet(Chessboard actualPosition, Chessboard newPosition) {
+    private boolean rookMovement(Chessboard actualPosition, Chessboard newPosition) {
         if (itHasntMoved(actualPosition, newPosition)) return false;
         int checkX = Math.abs(actualPosition.getX() - newPosition.getX());
         int checkY = Math.abs(actualPosition.getY() - newPosition.getY());
@@ -140,7 +139,7 @@ public class Movement {
 
     }
 
-    private boolean knightMovemet(Chessboard actualPosition, Chessboard newPosition) {
+    private boolean knightMovement(Chessboard actualPosition, Chessboard newPosition) {
         if (itHasntMoved(actualPosition, newPosition))
             return false;
         int checkX = Math.abs(actualPosition.getX() - newPosition.getX());

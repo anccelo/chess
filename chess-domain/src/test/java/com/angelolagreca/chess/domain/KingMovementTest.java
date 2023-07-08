@@ -70,16 +70,6 @@ public class KingMovementTest {
 
     }
 
-    @Test
-    public void kingMovement_should_not_be_possible_when_the_destination_is_occupied_by_a_piece_of_the_same_color_as_the_king_() {
-        movement = new Movement(WHITE_KING, game);
-        initialPoistion = E1;
-        finalPosition = E2;
 
-        boolean actual = movement.isAllowed(initialPoistion, finalPosition);
-        assertFalse(actual);
-
-
-    }
 
 }

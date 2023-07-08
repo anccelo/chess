@@ -3,6 +3,7 @@ package com.angelolagreca.chess.application;
 import com.angelolagreca.chess.domain.Chessboard;
 import com.angelolagreca.chess.domain.Game;
 import com.angelolagreca.chess.domain.Movement;
+import com.angelolagreca.chess.domain.exception.PieceMovementException;
 import com.angelolagreca.chess.domain.piece.TypeOfPiece;
 import org.springframework.stereotype.Component;
 
@@ -26,9 +27,9 @@ public class GameManagementImpl implements GameManagement {
     }
 
     @Override
-    public Game playerMove(Game game, Chessboard oldPosition, Chessboard newPosition) throws Exception {
+    public Game playerMove(Game game, Chessboard oldPosition, Chessboard newPosition) throws PieceMovementException {
         //determina nella vecchia posizione che piece c'é:
-        TypeOfPiece pieceCheSiEdecisoDiMuovere = deterimaIlPezzoCheSiVuoleMuovere(game, oldPosition);
+        TypeOfPiece pieceCheSiEdecisoDiMuovere = determinaIlPezzoCheSiVuoleMuovere(game, oldPosition);
         //sposta nella nuova posizione
         moveThePiece(game, oldPosition, newPosition, pieceCheSiEdecisoDiMuovere);
         //salva
@@ -36,23 +37,27 @@ public class GameManagementImpl implements GameManagement {
         return game;
     }
 
-    private static TypeOfPiece deterimaIlPezzoCheSiVuoleMuovere(Game game, Chessboard oldPoistion) {
+    private static TypeOfPiece determinaIlPezzoCheSiVuoleMuovere(Game game, Chessboard oldPoistion) {
         return game.getChessboardPieceMap().get(oldPoistion);
 
     }
 
     private static void moveThePiece(Game game, Chessboard oldPoistion, Chessboard newPosition,
-                                     TypeOfPiece pieceCheSiEdecisoDiMuovere) throws Exception {
-        checkIfMovimentIsPossibol(pieceCheSiEdecisoDiMuovere, game, oldPoistion, newPosition);
+                                     TypeOfPiece pieceCheSiEdecisoDiMuovere) throws PieceMovementException {
+        checkIfMovementIsPossible(pieceCheSiEdecisoDiMuovere, game, oldPoistion, newPosition);
         game.getChessboardPieceMap().put(oldPoistion, EMPTY);
         game.getChessboardPieceMap().put(newPosition, pieceCheSiEdecisoDiMuovere);
     }
 
-    private static void checkIfMovimentIsPossibol(TypeOfPiece pieceCheSiEdecisoDiMuovere, Game game, Chessboard oldPoistion,
-                                                  Chessboard newPosition) throws Exception {
+    private static void checkIfMovementIsPossible(TypeOfPiece pieceCheSiEdecisoDiMuovere, Game game, Chessboard oldPoistion,
+                                                  Chessboard targetPoition) throws PieceMovementException {
         Movement movement = new Movement(pieceCheSiEdecisoDiMuovere, game);
-        if (!movement.isAllowed(oldPoistion, newPosition))
-            throw new Exception("il movimento non é possibile");
+
+        if (movement.isTargetPositionOccupiedByAPieceOfItsOwnColour(oldPoistion, targetPoition)
+                || !movement.isAllowed(oldPoistion, targetPoition)) {
+
+            throw new PieceMovementException("il movimento non é possibile");
+        }
 
     }
 
