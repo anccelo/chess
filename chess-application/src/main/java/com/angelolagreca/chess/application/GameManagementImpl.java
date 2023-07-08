@@ -28,12 +28,9 @@ public class GameManagementImpl implements GameManagement {
 
     @Override
     public Game playerMove(Game game, Chessboard oldPosition, Chessboard newPosition) throws PieceMovementException {
-        //determina nella vecchia posizione che piece c'é:
-        TypeOfPiece pieceCheSiEdecisoDiMuovere = determinaIlPezzoCheSiVuoleMuovere(game, oldPosition);
-        //sposta nella nuova posizione
-        moveThePiece(game, oldPosition, newPosition, pieceCheSiEdecisoDiMuovere);
-        //salva
 
+        TypeOfPiece pieceCheSiEdecisoDiMuovere = determinaIlPezzoCheSiVuoleMuovere(game, oldPosition);
+        moveThePiece(game, oldPosition, newPosition, pieceCheSiEdecisoDiMuovere);
         return game;
     }
 
