@@ -1,6 +1,6 @@
 package com.angelolagreca.chess.domain;
 
-import com.angelolagreca.chess.domain.piece.Color;
+import com.angelolagreca.chess.domain.vo.Color;
 import com.angelolagreca.chess.domain.piece.TypeOfPiece;
 
 public class Movement {
@@ -12,7 +12,6 @@ public class Movement {
         this.typeOfPiece = typeOfPiece;
         this.actualGame = actualGame;
     }
-
 
     public boolean isAllowed(Chessboard oldPoistion, Chessboard newPosition) {
         switch (this.typeOfPiece) {
@@ -52,8 +51,8 @@ public class Movement {
     private boolean kingMovement(Chessboard actualPosition, Chessboard targetPosition) {
         if (itHasntMoved(actualPosition, targetPosition)) return false;
 
-        int checkX = Math.abs(actualPosition.getX() - targetPosition.getX());
-        int checkY = Math.abs(actualPosition.getY() - targetPosition.getY());
+        int checkX = Math.abs(actualPosition.getPosition().getX() - targetPosition.getPosition().getX());
+        int checkY = Math.abs(actualPosition.getPosition().getY() - targetPosition.getPosition().getY());
 
         if (checkX > 1 || checkY > 1)
             return checkX != 0 && checkY != 0;
@@ -71,7 +70,7 @@ public class Movement {
     }
 
     private static boolean isAWhitePawnStartPosition(Chessboard actualPosition) {
-        return actualPosition.getY() == 2;
+        return actualPosition.getPosition().getY() == 2;
     }
 
     private boolean blackPawnMovement(Chessboard actualPosition, Chessboard newPosition) {
@@ -85,32 +84,32 @@ public class Movement {
 
     private boolean singleWhitePawnMovement(Chessboard actualPosition, Chessboard newPosition) {
 
-        int checkX = Math.abs(actualPosition.getX() - newPosition.getX());
-        int checkY = newPosition.getY() - actualPosition.getY();
+        int checkX = Math.abs(actualPosition.getPosition().getX() - newPosition.getPosition().getX());
+        int checkY = newPosition.getPosition().getY() - actualPosition.getPosition().getY();
         return (checkX == 0 && checkY == 1);
     }
 
     private boolean startWhitePawnMovement(Chessboard actualPosition, Chessboard newPosition) {
 
-        int checkX = Math.abs(actualPosition.getX() - newPosition.getX());
-        int checkY = Math.abs(actualPosition.getY() - newPosition.getY());
+        int checkX = Math.abs(actualPosition.getPosition().getX() - newPosition.getPosition().getX());
+        int checkY = Math.abs(actualPosition.getPosition().getY() - newPosition.getPosition().getY());
 
         return (singleWhitePawnMovement(actualPosition, newPosition) || (checkX == 0 && checkY == 2));
     }
 
     private boolean singleBlackPawnMovement(Chessboard actualPosition, Chessboard newPosition) {
 
-        int checkX = Math.abs(actualPosition.getX() - newPosition.getX());
-        int checkY = actualPosition.getY() - newPosition.getY();
+        int checkX = Math.abs(actualPosition.getPosition().getX() - newPosition.getPosition().getX());
+        int checkY = actualPosition.getPosition().getY() - newPosition.getPosition().getY();
         return (checkX == 0 && checkY == 1);
 
     }
 
     private boolean startBlackPawnMovement(Chessboard actualPosition, Chessboard newPosition) {
 
-        if (actualPosition.getY() == 7) {
-            int checkX = Math.abs(actualPosition.getX() - newPosition.getX());
-            int checkY = Math.abs(newPosition.getY() - actualPosition.getY());
+        if (actualPosition.getPosition().getY() == 7) {
+            int checkX = Math.abs(actualPosition.getPosition().getX() - newPosition.getPosition().getX());
+            int checkY = Math.abs(newPosition.getPosition().getY() - actualPosition.getPosition().getY());
 
             return (singleBlackPawnMovement(actualPosition, newPosition) || (checkX == 0 && checkY == 2));
         }
@@ -118,22 +117,22 @@ public class Movement {
     }
 
     private static boolean isABlackPawnStartPosition(Chessboard actualPosition) {
-        return actualPosition.getY() == 7;
+        return actualPosition.getPosition().getY() == 7;
     }
 
     private boolean bishopMovement(Chessboard actualPosition, Chessboard newPosition) {
         if (itHasntMoved(actualPosition, newPosition)) return false;
 
-        int checkX = Math.abs(actualPosition.getX() - newPosition.getX());
-        int checkY = Math.abs(actualPosition.getY() - newPosition.getY());
+        int checkX = Math.abs(actualPosition.getPosition().getX() - newPosition.getPosition().getX());
+        int checkY = Math.abs(actualPosition.getPosition().getY() - newPosition.getPosition().getY());
         return checkX == checkY;
     }
 
 
     private boolean rookMovement(Chessboard actualPosition, Chessboard newPosition) {
         if (itHasntMoved(actualPosition, newPosition)) return false;
-        int checkX = Math.abs(actualPosition.getX() - newPosition.getX());
-        int checkY = Math.abs(actualPosition.getY() - newPosition.getY());
+        int checkX = Math.abs(actualPosition.getPosition().getX() - newPosition.getPosition().getX());
+        int checkY = Math.abs(actualPosition.getPosition().getY() - newPosition.getPosition().getY());
 
         return (checkX != 0 && checkY == 0 || checkY != 0 && checkX == 0);
 
@@ -142,8 +141,8 @@ public class Movement {
     private boolean knightMovement(Chessboard actualPosition, Chessboard newPosition) {
         if (itHasntMoved(actualPosition, newPosition))
             return false;
-        int checkX = Math.abs(actualPosition.getX() - newPosition.getX());
-        int checkY = Math.abs(actualPosition.getY() - newPosition.getY());
+        int checkX = Math.abs(actualPosition.getPosition().getX() - newPosition.getPosition().getX());
+        int checkY = Math.abs(actualPosition.getPosition().getY() - newPosition.getPosition().getY());
 
         return (checkX == 1 && checkY == 2 || checkY == 1 && checkX == 2);
 

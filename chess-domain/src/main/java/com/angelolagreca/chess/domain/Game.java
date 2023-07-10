@@ -7,8 +7,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.angelolagreca.chess.domain.piece.Color.BLACK;
-import static com.angelolagreca.chess.domain.piece.Color.WHITE;
+import static com.angelolagreca.chess.domain.vo.Color.BLACK;
+import static com.angelolagreca.chess.domain.vo.Color.WHITE;
 import static com.angelolagreca.chess.domain.piece.TypeOfPiece.*;
 
 @Getter
@@ -19,7 +19,12 @@ public class Game {
     private final Player playerOne = new Player(WHITE);
     private final Player playerTwo = new Player(BLACK);
 
+    private  int moveCounter = 0;
+
     private final Map<Chessboard, TypeOfPiece> chessboardPieceMap = new LinkedHashMap<>();
+
+    private final Map<Integer, Map<Chessboard, TypeOfPiece> > historyChessboardPieceMap =
+            new LinkedHashMap<>();
 
     public Game() {
 
@@ -28,6 +33,13 @@ public class Game {
         }
         initWhiteTeam();
         initBlackTeam();
+
+        historyChessboardPieceMap.put(moveCounter, chessboardPieceMap);
+
+    }
+
+    public Integer incrementMoveCounter() {
+        return this.moveCounter++;
     }
 
 

@@ -1,6 +1,8 @@
 package com.angelolagreca.chess.domain.piece;
 
-import static com.angelolagreca.chess.domain.piece.Color.*;
+import com.angelolagreca.chess.domain.vo.Color;
+
+import static com.angelolagreca.chess.domain.vo.Color.*;
 
 public enum TypeOfPiece {
 

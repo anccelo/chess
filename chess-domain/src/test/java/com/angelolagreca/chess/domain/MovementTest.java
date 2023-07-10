@@ -1,6 +1,6 @@
 package com.angelolagreca.chess.domain;
 
-import com.angelolagreca.chess.domain.piece.Color;
+import com.angelolagreca.chess.domain.vo.Color;
 import com.angelolagreca.chess.domain.piece.TypeOfPiece;
 import org.junit.jupiter.api.Test;
 

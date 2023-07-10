@@ -4,7 +4,7 @@ package com.angelolagreca.api;
 import com.angelolagreca.chess.application.*;
 import com.angelolagreca.chess.domain.*;
 import com.angelolagreca.chess.domain.exception.PieceMovementException;
-import com.angelolagreca.chess.domain.piece.*;
+import com.angelolagreca.chess.domain.vo.Color;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +17,6 @@ public class GameController {
 
     @Autowired
     private GameManagement gameManagement;
-
 
     @PostMapping(
             value = "/move/{color}/{oldPosition}/{newPosition}",

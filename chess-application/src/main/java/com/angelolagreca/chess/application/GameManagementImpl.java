@@ -5,8 +5,10 @@ import com.angelolagreca.chess.domain.Game;
 import com.angelolagreca.chess.domain.Movement;
 import com.angelolagreca.chess.domain.exception.PieceMovementException;
 import com.angelolagreca.chess.domain.piece.TypeOfPiece;
+import com.angelolagreca.chess.domain.vo.Position;
 import org.springframework.stereotype.Component;
 
+import static com.angelolagreca.chess.domain.Chessboard.D2;
 import static com.angelolagreca.chess.domain.piece.TypeOfPiece.*;
 
 @Component
@@ -27,35 +29,97 @@ public class GameManagementImpl implements GameManagement {
     }
 
     @Override
-    public Game playerMove(Game game, Chessboard oldPosition, Chessboard newPosition) throws PieceMovementException {
+    public Game playerMove(Game game, Chessboard actualPosition, Chessboard newPosition) throws PieceMovementException {
 
-        TypeOfPiece pieceCheSiEdecisoDiMuovere = determinaIlPezzoCheSiVuoleMuovere(game, oldPosition);
-        moveThePiece(game, oldPosition, newPosition, pieceCheSiEdecisoDiMuovere);
+        TypeOfPiece pieceToMve = determineThePieceToMove(game, actualPosition);
+        moveThePiece(game, actualPosition, newPosition, pieceToMve);
+
+        saveMoveIntoHistoricalOfThisGame(game);
+
         return game;
     }
 
-    private static TypeOfPiece determinaIlPezzoCheSiVuoleMuovere(Game game, Chessboard oldPoistion) {
-        return game.getChessboardPieceMap().get(oldPoistion);
+    private static void saveMoveIntoHistoricalOfThisGame(Game game) {
+        game.getHistoryChessboardPieceMap().put(game.incrementMoveCounter(), game.getChessboardPieceMap());
+    }
+
+    private static TypeOfPiece determineThePieceToMove(Game game, Chessboard actualPosition) {
+        return game.getChessboardPieceMap().get(actualPosition);
 
     }
 
-    private static void moveThePiece(Game game, Chessboard oldPoistion, Chessboard newPosition,
+    private static void moveThePiece(Game game, Chessboard actualPosition, Chessboard targetPosition,
                                      TypeOfPiece pieceCheSiEdecisoDiMuovere) throws PieceMovementException {
-        checkIfMovementIsPossible(pieceCheSiEdecisoDiMuovere, game, oldPoistion, newPosition);
-        game.getChessboardPieceMap().put(oldPoistion, EMPTY);
-        game.getChessboardPieceMap().put(newPosition, pieceCheSiEdecisoDiMuovere);
+        checkIfMovementIsPossible(pieceCheSiEdecisoDiMuovere, game, actualPosition, targetPosition);
+        game.getChessboardPieceMap().put(actualPosition, EMPTY);
+        game.getChessboardPieceMap().put(targetPosition, pieceCheSiEdecisoDiMuovere);
     }
 
-    private static void checkIfMovementIsPossible(TypeOfPiece pieceCheSiEdecisoDiMuovere, Game game, Chessboard oldPoistion,
-                                                  Chessboard targetPoition) throws PieceMovementException {
-        Movement movement = new Movement(pieceCheSiEdecisoDiMuovere, game);
+    private static void checkIfMovementIsPossible(TypeOfPiece pieceToMove, Game game, Chessboard actualPosition,
+                                                  Chessboard targetPosition) throws PieceMovementException {
+        Movement movement = new Movement(pieceToMove, game);
 
-        if (movement.isTargetPositionOccupiedByAPieceOfItsOwnColour(oldPoistion, targetPoition)
-                || !movement.isAllowed(oldPoistion, targetPoition)) {
+        if (movement.isTargetPositionOccupiedByAPieceOfItsOwnColour(actualPosition, targetPosition)
+                || !movement.isAllowed(actualPosition, targetPosition)
+                || !theWayOnTheChessboardIsFree(game, actualPosition, targetPosition)) {
 
             throw new PieceMovementException("il movimento non é possibile");
         }
 
+    }
+
+    private static boolean theWayOnTheChessboardIsFree(Game game, Chessboard actualPosition, Chessboard targetPosition) {
+
+        if (pieceIsAKnight(game, actualPosition)) {
+            return true;
+        } else {
+            if (actualPosition.getPosition().getX() == targetPosition.getPosition().getX()) {
+                return checkIfVerticalIsFree(game, actualPosition, targetPosition);
+            }
+            if (actualPosition.getPosition().getY() == targetPosition.getPosition().getY()) {
+                return checkIfHorizontalIsFree(game, actualPosition, targetPosition);
+            }
+
+            return true;
+        }
+    }
+
+    private static boolean checkIfHorizontalIsFree(Game game, Chessboard actualPosition, Chessboard targetPosition) {
+        int initialOrdinate = actualPosition.getPosition().getX();
+        int finalOrdinate = targetPosition.getPosition().getX();
+        int bigger = Integer.max(initialOrdinate, finalOrdinate);
+        int smaller = Integer.min(initialOrdinate, finalOrdinate);
+
+        for (int ordinate = smaller + 1; ordinate < bigger; ordinate++) {
+            Position position = new Position(actualPosition.getPosition().getX(), ordinate);
+            TypeOfPiece typeOfPieceInCrossedPosition =
+                    game.getChessboardPieceMap().get(Chessboard.valueOfPosition(position));
+            if (!EMPTY.equals(typeOfPieceInCrossedPosition))
+                return false;
+        }
+        return true;
+    }
+
+    private static boolean checkIfVerticalIsFree(Game game, Chessboard actualPosition, Chessboard targetPosition) {
+        int initialAbscissa = actualPosition.getPosition().getY();
+        int finalAbscissa = targetPosition.getPosition().getY();
+        int bigger = Integer.max(initialAbscissa, finalAbscissa);
+        int smaller = Integer.min(initialAbscissa, finalAbscissa);
+
+        for (int ordinate = smaller + 1; ordinate < bigger; ordinate++) {
+            Position position = new Position( actualPosition.getPosition().getX(),ordinate);
+            TypeOfPiece typeOfPieceInCrossedPosition =
+                    game.getChessboardPieceMap().get(Chessboard.valueOfPosition(position));
+            if (!EMPTY.equals(typeOfPieceInCrossedPosition))
+                return false;
+        }
+        return true;
+    }
+
+
+    private static boolean pieceIsAKnight(Game game, Chessboard actualPosition) {
+        return WHITE_KNIGHT.equals(game.getChessboardPieceMap().get(actualPosition))
+                || BLACK_KNIGHT.equals(game.getChessboardPieceMap().get(actualPosition));
     }
 
 
@@ -90,7 +154,7 @@ public class GameManagementImpl implements GameManagement {
         game.getChessboardPieceMap().put(Chessboard.A2, WHITE_PAWN);
         game.getChessboardPieceMap().put(Chessboard.B2, WHITE_PAWN);
         game.getChessboardPieceMap().put(Chessboard.C2, WHITE_PAWN);
-        game.getChessboardPieceMap().put(Chessboard.D2, WHITE_PAWN);
+        game.getChessboardPieceMap().put(D2, WHITE_PAWN);
         game.getChessboardPieceMap().put(Chessboard.E2, WHITE_PAWN);
         game.getChessboardPieceMap().put(Chessboard.F2, WHITE_PAWN);
         game.getChessboardPieceMap().put(Chessboard.G2, WHITE_PAWN);
