@@ -1,12 +1,10 @@
 package com.angelolagreca.chess.application;
 
-import com.angelolagreca.chess.domain.Chessboard;
-import com.angelolagreca.chess.domain.Game;
-import com.angelolagreca.chess.domain.Movement;
-import com.angelolagreca.chess.domain.exception.PieceMovementException;
-import com.angelolagreca.chess.domain.piece.TypeOfPiece;
-import com.angelolagreca.chess.domain.vo.Position;
-import org.springframework.stereotype.Component;
+import com.angelolagreca.chess.domain.*;
+import com.angelolagreca.chess.domain.exception.*;
+import com.angelolagreca.chess.domain.piece.*;
+import com.angelolagreca.chess.domain.vo.*;
+import org.springframework.stereotype.*;
 
 import static com.angelolagreca.chess.domain.Chessboard.D2;
 import static com.angelolagreca.chess.domain.piece.TypeOfPiece.*;
@@ -92,15 +90,23 @@ public class GameManagementImpl implements GameManagement {
 
         int initialAbscissa = actualPosition.getPosition().getY();
         int finalAbscissa = targetPosition.getPosition().getY();
-        int biggerAbscissa = Integer.max(initialAbscissa, finalAbscissa);
-        int smallerAbscissa = Integer.min(initialAbscissa, finalAbscissa);
+        int abscissaToCheck = Integer.max(initialAbscissa, finalAbscissa) -1;
 
         for (int ordinate = smallerOrdinate + 1; ordinate < biggerOrdinate; ordinate++) {
-//todo
-        }
-        return false;
 
+                Position position = new Position(abscissaToCheck, ordinate);
+                TypeOfPiece typeOfPieceInCrossedPosition =
+                        game.getChessboardPieceMap().get(Chessboard.valueOfPosition(position));
+                if (!EMPTY.equals(typeOfPieceInCrossedPosition)){
+                    return false;
+                }
+            abscissaToCheck--;
+        }
+
+        return true;
     }
+
+
 
     private static boolean checkIfVerticalIsFree(Game game, Chessboard actualPosition, Chessboard targetPosition) {
         int initialOrdinate = actualPosition.getPosition().getY();
@@ -125,7 +131,7 @@ public class GameManagementImpl implements GameManagement {
         int smaller = Integer.min(initialAbscissa, finalAbscissa);
 
         for (int abscissa = smaller + 1; abscissa < bigger; abscissa++) {
-            Position position = new Position( abscissa, actualPosition.getPosition().getY());
+            Position position = new Position(abscissa, actualPosition.getPosition().getY());
             TypeOfPiece typeOfPieceInCrossedPosition =
                     game.getChessboardPieceMap().get(Chessboard.valueOfPosition(position));
             if (!EMPTY.equals(typeOfPieceInCrossedPosition))

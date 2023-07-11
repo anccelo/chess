@@ -32,11 +32,11 @@ class GameManagementImplTest {
             throws PieceMovementException {
 
         Game game = gameManagement.init();
-        Game movePawn = gameManagement.playerMove(game, D7, D6);
-        Game moveAgainPawn = gameManagement.playerMove(movePawn, D6, D5);
-        Game actualMoveQueen = gameManagement.playerMove(moveAgainPawn, D8, D6);
+        gameManagement.playerMove(game, D7, D6);
+        gameManagement.playerMove(game, D6, D5);
+        gameManagement.playerMove(game, D8, D6);
 
-        Assertions.assertInstanceOf(Game.class, actualMoveQueen);
+        Assertions.assertInstanceOf(Game.class, game);
 
     }
 
@@ -58,15 +58,15 @@ class GameManagementImplTest {
             throws PieceMovementException {
 
         Game game = gameManagement.init();
-        Game movePawnFromD2 = gameManagement.playerMove(game, D2, D3);
-        Game movePawnFromC2 = gameManagement.playerMove(movePawnFromD2, E2, E3);
-        Game movePawnFromA2 = gameManagement.playerMove(movePawnFromC2, G2, G3);
-        Game actualMoveQueen = gameManagement.playerMove(movePawnFromA2, D1, D2);
+        gameManagement.playerMove(game, D2, D3);
+        gameManagement.playerMove(game, E2, E3);
+        gameManagement.playerMove(game, G2, G3);
+        gameManagement.playerMove(game, D1, D2);
 
-        assertEquals(WHITE_QUEEN, actualMoveQueen.getChessboardPieceMap().get(D2));
-        assertEquals(WHITE_PAWN, actualMoveQueen.getChessboardPieceMap().get(B2));
+        assertEquals(WHITE_QUEEN, game.getChessboardPieceMap().get(D2));
+        assertEquals(WHITE_PAWN, game.getChessboardPieceMap().get(B2));
         PieceMovementException thrown = Assertions.assertThrows(PieceMovementException.class, () ->
-                gameManagement.playerMove(actualMoveQueen, D2, H2));
+                gameManagement.playerMove(game, D2, H2));
         assertEquals(MOVEMENT_NOT_ALLOWED, thrown.getMessage());
 
     }
@@ -76,15 +76,15 @@ class GameManagementImplTest {
             throws PieceMovementException {
 
         Game game = gameManagement.init();
-        Game movePawnFromD2 = gameManagement.playerMove(game, D2, D3);
-        Game movePawnFromC2 = gameManagement.playerMove(movePawnFromD2, C2, C3);
-        Game movePawnFromA2 = gameManagement.playerMove(movePawnFromC2, A2, A3);
-        Game actualMoveQueen = gameManagement.playerMove(movePawnFromA2, D1, D2);
+        gameManagement.playerMove(game, D2, D3);
+        gameManagement.playerMove(game, C2, C3);
+        gameManagement.playerMove(game, A2, A3);
+        gameManagement.playerMove(game, D1, D2);
 
-        assertEquals(WHITE_QUEEN, actualMoveQueen.getChessboardPieceMap().get(D2));
-        assertEquals(WHITE_PAWN, actualMoveQueen.getChessboardPieceMap().get(B2));
+        assertEquals(WHITE_QUEEN, game.getChessboardPieceMap().get(D2));
+        assertEquals(WHITE_PAWN, game.getChessboardPieceMap().get(B2));
         PieceMovementException thrown = Assertions.assertThrows(PieceMovementException.class, () ->
-                gameManagement.playerMove(actualMoveQueen, D2, A2));
+                gameManagement.playerMove(game, D2, A2));
         assertEquals(MOVEMENT_NOT_ALLOWED, thrown.getMessage());
 
     }
@@ -114,18 +114,63 @@ class GameManagementImplTest {
         assertEquals(MOVEMENT_NOT_ALLOWED, thrown.getMessage());
 
     }
-//    @Test
-//    void queen_left_and_up_diagonal_movement_should_not_permitted_when_an_other_piece_is_present_between_actual_and_target_position() {
-//
-//        Game game = gameManagement.init();
-//        assertEquals(WHITE_PAWN, game.getChessboardPieceMap().get(C2));
-//        assertEquals(WHITE_QUEEN, game.getChessboardPieceMap().get(D1));
-//
-//        PieceMovementException thrown = Assertions.assertThrows(PieceMovementException.class, () ->
-//                gameManagement.playerMove(game, D1, A4));
-//
-//        assertEquals(MOVEMENT_NOT_ALLOWED, thrown.getMessage());
-//
-//    }
+
+    @Test
+    void queen_left_up_diagonal_movement_should_not_permitted_when_an_other_piece_is_present_between_actual_and_target_position() {
+
+        Game game = gameManagement.init();
+        assertEquals(WHITE_PAWN, game.getChessboardPieceMap().get(C2));
+        assertEquals(WHITE_QUEEN, game.getChessboardPieceMap().get(D1));
+
+        PieceMovementException thrown = Assertions.assertThrows(PieceMovementException.class, () ->
+                gameManagement.playerMove(game, D1, A4));
+
+        assertEquals(MOVEMENT_NOT_ALLOWED, thrown.getMessage());
+
+    }
+
+    @Test
+    void queen_right_up_diagonal_movement_should_not_permitted_when_an_other_piece_is_present_between_actual_and_target_position() {
+
+        Game game = gameManagement.init();
+        assertEquals(WHITE_PAWN, game.getChessboardPieceMap().get(E2));
+        assertEquals(WHITE_QUEEN, game.getChessboardPieceMap().get(D1));
+
+        PieceMovementException thrown = Assertions.assertThrows(PieceMovementException.class, () ->
+                gameManagement.playerMove(game, D1, H5));
+
+        assertEquals(MOVEMENT_NOT_ALLOWED, thrown.getMessage());
+
+    }
+
+    @Test
+    void queen_left_up_diagonal_movement_should_permitted_when_no_other_piece_is_present_between_actual_and_target_position()
+            throws PieceMovementException {
+
+        Game game = gameManagement.init();
+
+        gameManagement.playerMove(game, C2, C3);
+        assertEquals(EMPTY, game.getChessboardPieceMap().get(C2));
+        assertEquals(WHITE_QUEEN, game.getChessboardPieceMap().get(D1));
+
+        gameManagement.playerMove(game, D1, A4);
+
+        assertEquals(WHITE_QUEEN, game.getChessboardPieceMap().get(A4));
+
+    }
+
+    @Test
+    void queen_right_up_diagonal_movement_should_be_permitted_when_no_other_piece_is_present_between_actual_and_target_position() throws PieceMovementException {
+
+        Game game = gameManagement.init();
+        gameManagement.playerMove(game, E2, E3);
+        assertEquals(WHITE_PAWN, game.getChessboardPieceMap().get(E3));
+        assertEquals(WHITE_QUEEN, game.getChessboardPieceMap().get(D1));
+
+        gameManagement.playerMove(game, D1, H5);
+
+        assertEquals(WHITE_QUEEN, game.getChessboardPieceMap().get(H5));
+
+    }
 
 }
