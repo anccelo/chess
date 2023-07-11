@@ -1,11 +1,10 @@
 package com.angelolagreca.chess.application;
 
-import com.angelolagreca.chess.domain.Game;
-import com.angelolagreca.chess.domain.exception.PieceMovementException;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import com.angelolagreca.chess.domain.*;
+import com.angelolagreca.chess.domain.exception.*;
+import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.boot.test.context.*;
 
 import static com.angelolagreca.chess.domain.Chessboard.*;
 import static com.angelolagreca.chess.domain.piece.TypeOfPiece.*;
@@ -14,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest(classes = GameManagementImpl.class)
 class GameManagementImplTest {
 
-    public static final String MOVEMENT_NOT_ALLOWED = "il movimento non é possibile";
+    public static final String MOVEMENT_NOT_ALLOWED = "Movement is not possible.";
     @Autowired
     GameManagementImpl gameManagement;
 
@@ -29,7 +28,7 @@ class GameManagementImplTest {
     }
 
     @Test
-    void should_be_returned_actua_game_when_target_position_is_not_occupied_for_a_piece_of_same_color()
+    void should_be_returned_actual_game_when_target_position_is_not_occupied_for_a_piece_of_same_color()
             throws PieceMovementException {
 
         Game game = gameManagement.init();
@@ -55,7 +54,8 @@ class GameManagementImplTest {
     }
 
     @Test
-    void queen_right_horizontal_movement_should_not_permitted_when_an_other_piece_is_present_between_actual_and_target_position() throws PieceMovementException {
+    void queen_right_horizontal_movement_should_not_permitted_when_an_other_piece_is_present_between_actual_and_target_position()
+            throws PieceMovementException {
 
         Game game = gameManagement.init();
         Game movePawnFromD2 = gameManagement.playerMove(game, D2, D3);
@@ -72,7 +72,8 @@ class GameManagementImplTest {
     }
 
     @Test
-    void queen_left_horizontal_movement_should_not_permitted_when_an_other_piece_is_present_between_actual_and_target_position() throws PieceMovementException {
+    void queen_left_horizontal_movement_should_not_permitted_when_an_other_piece_is_present_between_actual_and_target_position()
+            throws PieceMovementException {
 
         Game game = gameManagement.init();
         Game movePawnFromD2 = gameManagement.playerMove(game, D2, D3);
@@ -113,5 +114,18 @@ class GameManagementImplTest {
         assertEquals(MOVEMENT_NOT_ALLOWED, thrown.getMessage());
 
     }
+//    @Test
+//    void queen_left_and_up_diagonal_movement_should_not_permitted_when_an_other_piece_is_present_between_actual_and_target_position() {
+//
+//        Game game = gameManagement.init();
+//        assertEquals(WHITE_PAWN, game.getChessboardPieceMap().get(C2));
+//        assertEquals(WHITE_QUEEN, game.getChessboardPieceMap().get(D1));
+//
+//        PieceMovementException thrown = Assertions.assertThrows(PieceMovementException.class, () ->
+//                gameManagement.playerMove(game, D1, A4));
+//
+//        assertEquals(MOVEMENT_NOT_ALLOWED, thrown.getMessage());
+//
+//    }
 
 }

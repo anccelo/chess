@@ -31,8 +31,8 @@ public class GameManagementImpl implements GameManagement {
     @Override
     public Game playerMove(Game game, Chessboard actualPosition, Chessboard newPosition) throws PieceMovementException {
 
-        TypeOfPiece pieceToMve = determineThePieceToMove(game, actualPosition);
-        moveThePiece(game, actualPosition, newPosition, pieceToMve);
+        TypeOfPiece pieceToMove = determineThePieceToMove(game, actualPosition);
+        moveThePiece(game, actualPosition, newPosition, pieceToMove);
 
         saveMoveIntoHistoricalOfThisGame(game);
 
@@ -63,30 +63,48 @@ public class GameManagementImpl implements GameManagement {
                 || !movement.isAllowed(actualPosition, targetPosition)
                 || !theWayOnTheChessboardIsFree(game, actualPosition, targetPosition)) {
 
-            throw new PieceMovementException("il movimento non é possibile");
+            throw new PieceMovementException("Movement is not possible.");
         }
-
     }
 
     private static boolean theWayOnTheChessboardIsFree(Game game, Chessboard actualPosition, Chessboard targetPosition) {
 
-        if (pieceIsAKnight(game, actualPosition)) {
-            return true;
-        } else {
+        if (!pieceIsAKnight(game, actualPosition)) {
+
             if (actualPosition.getPosition().getX() == targetPosition.getPosition().getX()) {
                 return checkIfVerticalIsFree(game, actualPosition, targetPosition);
             }
             if (actualPosition.getPosition().getY() == targetPosition.getPosition().getY()) {
                 return checkIfHorizontalIsFree(game, actualPosition, targetPosition);
             }
+            //checkDiagonal
+            return checkIfDiagonalIsFree(game, actualPosition, targetPosition);
 
-            return true;
         }
+        return true;
     }
 
-    private static boolean checkIfHorizontalIsFree(Game game, Chessboard actualPosition, Chessboard targetPosition) {
+    private static boolean checkIfDiagonalIsFree(Game game, Chessboard actualPosition, Chessboard targetPosition) {
         int initialOrdinate = actualPosition.getPosition().getX();
         int finalOrdinate = targetPosition.getPosition().getX();
+        int biggerOrdinate = Integer.max(initialOrdinate, finalOrdinate);
+        int smallerOrdinate = Integer.min(initialOrdinate, finalOrdinate);
+
+        int initialAbscissa = actualPosition.getPosition().getY();
+        int finalAbscissa = targetPosition.getPosition().getY();
+        int biggerAbscissa = Integer.max(initialAbscissa, finalAbscissa);
+        int smallerAbscissa = Integer.min(initialAbscissa, finalAbscissa);
+
+        for (int ordinate = smallerOrdinate + 1; ordinate < biggerOrdinate; ordinate++) {
+//todo
+        }
+        return false;
+
+    }
+
+    private static boolean checkIfVerticalIsFree(Game game, Chessboard actualPosition, Chessboard targetPosition) {
+        int initialOrdinate = actualPosition.getPosition().getY();
+        int finalOrdinate = targetPosition.getPosition().getY();
         int bigger = Integer.max(initialOrdinate, finalOrdinate);
         int smaller = Integer.min(initialOrdinate, finalOrdinate);
 
@@ -100,14 +118,14 @@ public class GameManagementImpl implements GameManagement {
         return true;
     }
 
-    private static boolean checkIfVerticalIsFree(Game game, Chessboard actualPosition, Chessboard targetPosition) {
-        int initialAbscissa = actualPosition.getPosition().getY();
-        int finalAbscissa = targetPosition.getPosition().getY();
+    private static boolean checkIfHorizontalIsFree(Game game, Chessboard actualPosition, Chessboard targetPosition) {
+        int initialAbscissa = actualPosition.getPosition().getX();
+        int finalAbscissa = targetPosition.getPosition().getX();
         int bigger = Integer.max(initialAbscissa, finalAbscissa);
         int smaller = Integer.min(initialAbscissa, finalAbscissa);
 
-        for (int ordinate = smaller + 1; ordinate < bigger; ordinate++) {
-            Position position = new Position( actualPosition.getPosition().getX(),ordinate);
+        for (int abscissa = smaller + 1; abscissa < bigger; abscissa++) {
+            Position position = new Position( abscissa, actualPosition.getPosition().getY());
             TypeOfPiece typeOfPieceInCrossedPosition =
                     game.getChessboardPieceMap().get(Chessboard.valueOfPosition(position));
             if (!EMPTY.equals(typeOfPieceInCrossedPosition))
