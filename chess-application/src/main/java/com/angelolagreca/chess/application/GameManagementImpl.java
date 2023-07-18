@@ -5,7 +5,7 @@ import com.angelolagreca.chess.domain.Game;
 import com.angelolagreca.chess.domain.Movement;
 import com.angelolagreca.chess.domain.exception.PieceMovementException;
 import com.angelolagreca.chess.domain.piece.TypeOfPiece;
-import com.angelolagreca.chess.domain.vo.Position;
+import com.angelolagreca.chess.domain.vo.*;
 import org.springframework.stereotype.Component;
 
 import static com.angelolagreca.chess.domain.Chessboard.D2;
@@ -51,15 +51,31 @@ public class GameManagementImpl implements GameManagement {
     }
 
     private static void moveThePiece(Game game, Chessboard actualPosition, Chessboard targetPosition,
-                                     TypeOfPiece pieceCheSiEdecisoDiMuovere) throws PieceMovementException {
-        checkIfMovementIsPossible(pieceCheSiEdecisoDiMuovere, game, actualPosition, targetPosition);
+                                     TypeOfPiece pieceToMove) throws PieceMovementException {
+        isPlayerTurn(game, pieceToMove);
+
+        checkIfMovementIsPossible(pieceToMove, game, actualPosition, targetPosition);
         game.getChessboardPieceMap().put(actualPosition, EMPTY);
-        game.getChessboardPieceMap().put(targetPosition, pieceCheSiEdecisoDiMuovere);
+        game.getChessboardPieceMap().put(targetPosition, pieceToMove);
+    }
+
+    private static void  isPlayerTurn(Game game, TypeOfPiece pieceToMove) throws PieceMovementException {
+        if(pieceToMove.getColor() == Color.WHITE && game.isFlagWhitePlayerTurn()){
+            game.setFlagWhitePlayerTurn(false);
+        } else if (pieceToMove.getColor() == Color.BLACK && !game.isFlagWhitePlayerTurn()) {
+            game.setFlagWhitePlayerTurn(true);
+        } else {
+            throw new PieceMovementException("Is not turn of " + pieceToMove.getColor() + " player");
+        }
+
     }
 
     private static void checkIfMovementIsPossible(TypeOfPiece pieceToMove, Game game, Chessboard actualPosition,
                                                   Chessboard targetPosition) throws PieceMovementException {
+
+
         Movement movement = new Movement(pieceToMove, game);
+
 
         if (movement.isTargetPositionOccupiedByAPieceOfItsOwnColour(actualPosition, targetPosition)
                 || !movement.isAllowed(actualPosition, targetPosition)

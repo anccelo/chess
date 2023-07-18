@@ -21,6 +21,12 @@ public class Game {
 
     private  int moveCounter = 0;
 
+    public void setFlagWhitePlayerTurn(boolean flagWhitePlayerTurn) {
+        this.flagWhitePlayerTurn = flagWhitePlayerTurn;
+    }
+
+    private boolean flagWhitePlayerTurn = true;
+
     private final Map<Chessboard, TypeOfPiece> chessboardPieceMap = new LinkedHashMap<>();
 
     private final Map<Integer, Map<Chessboard, TypeOfPiece> > historyChessboardPieceMap =
