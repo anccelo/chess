@@ -1,12 +1,10 @@
 package com.angelolagreca.chess.application;
 
-import com.angelolagreca.chess.domain.Chessboard;
-import com.angelolagreca.chess.domain.Game;
-import com.angelolagreca.chess.domain.Movement;
-import com.angelolagreca.chess.domain.exception.PieceMovementException;
-import com.angelolagreca.chess.domain.piece.TypeOfPiece;
+import com.angelolagreca.chess.domain.*;
+import com.angelolagreca.chess.domain.exception.*;
+import com.angelolagreca.chess.domain.piece.*;
 import com.angelolagreca.chess.domain.vo.*;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.*;
 
 import static com.angelolagreca.chess.domain.Chessboard.D2;
 import static com.angelolagreca.chess.domain.piece.TypeOfPiece.*;
@@ -41,10 +39,6 @@ public class GameManagementImpl implements GameManagement {
         return game;
     }
 
-    private static void saveMoveIntoHistoricalOfThisGame(Game game) {
-        game.getHistoryChessboardPieceMap().put(game.incrementMoveCounter(), game.getChessboardPieceMap());
-    }
-
     private static TypeOfPiece determineThePieceToMove(Game game, Chessboard actualPosition) {
         return game.getChessboardPieceMap().get(actualPosition);
 
@@ -52,15 +46,20 @@ public class GameManagementImpl implements GameManagement {
 
     private static void moveThePiece(Game game, Chessboard actualPosition, Chessboard targetPosition,
                                      TypeOfPiece pieceToMove) throws PieceMovementException {
-        isPlayerTurn(game, pieceToMove);
 
+        checkIfIsPlayerTurn(game, pieceToMove, actualPosition);
         checkIfMovementIsPossible(pieceToMove, game, actualPosition, targetPosition);
         game.getChessboardPieceMap().put(actualPosition, EMPTY);
         game.getChessboardPieceMap().put(targetPosition, pieceToMove);
     }
 
-    private static void  isPlayerTurn(Game game, TypeOfPiece pieceToMove) throws PieceMovementException {
-        if(pieceToMove.getColor() == Color.WHITE && game.isFlagWhitePlayerTurn()){
+    private static void checkIfIsPlayerTurn(Game game, TypeOfPiece pieceToMove, Chessboard actualPosition)
+            throws PieceMovementException {
+
+        if (EMPTY.equals(pieceToMove)) {
+            throw new PieceMovementException("Wrong movement: chessboard position " + actualPosition + " is EMPTY");
+        }
+        if (pieceToMove.getColor() == Color.WHITE && game.isFlagWhitePlayerTurn()) {
             game.setFlagWhitePlayerTurn(false);
         } else if (pieceToMove.getColor() == Color.BLACK && !game.isFlagWhitePlayerTurn()) {
             game.setFlagWhitePlayerTurn(true);
@@ -76,7 +75,6 @@ public class GameManagementImpl implements GameManagement {
 
         Movement movement = new Movement(pieceToMove, game);
 
-
         if (movement.isTargetPositionOccupiedByAPieceOfItsOwnColour(actualPosition, targetPosition)
                 || !movement.isAllowed(actualPosition, targetPosition)
                 || !theWayOnTheChessboardIsFree(game, actualPosition, targetPosition)) {
@@ -89,7 +87,7 @@ public class GameManagementImpl implements GameManagement {
 
         if (pieceIsAKnight(game, actualPosition)) {
             return true;
-        }else {
+        } else {
             if (actualPosition.getPosition().getX() == targetPosition.getPosition().getX()) {
                 return checkIfVerticalIsFree(game, actualPosition, targetPosition);
             }
@@ -183,6 +181,10 @@ public class GameManagementImpl implements GameManagement {
                 || BLACK_KNIGHT.equals(game.getChessboardPieceMap().get(actualPosition));
     }
 
+
+    private static void saveMoveIntoHistoricalOfThisGame(Game game) {
+        game.getHistoryChessboardPieceMap().put(game.incrementMoveCounter(), game.getChessboardPieceMap());
+    }
 
     private static void initBlackTeam(Game game) {
         game.getChessboardPieceMap().put(Chessboard.A8, BLACK_ROOK);
