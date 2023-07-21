@@ -3,9 +3,7 @@ package com.angelolagreca.chess.domain;
 import com.angelolagreca.chess.domain.piece.TypeOfPiece;
 import lombok.Getter;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static com.angelolagreca.chess.domain.vo.Color.BLACK;
 import static com.angelolagreca.chess.domain.vo.Color.WHITE;
@@ -16,21 +14,17 @@ public class Game {
 
     private final String id = UUID.randomUUID().toString();
 
-    private final Player playerOne = new Player(WHITE);
-    private final Player playerTwo = new Player(BLACK);
+    private final Map<Chessboard, TypeOfPiece> chessboardPieceMap = new LinkedHashMap<>();
+    private final Player whitePlayer = new Player(WHITE);
+    private final Player blackPlayer = new Player(BLACK);
 
-    private  int moveCounter = 0;
+    List<TypeOfPiece> whitePlayerCaptureRegister = new ArrayList<>();
+    List<TypeOfPiece> blackPlayerCaptureRegister = new ArrayList<>();
 
-    public void setFlagWhitePlayerTurn(boolean flagWhitePlayerTurn) {
-        this.flagWhitePlayerTurn = flagWhitePlayerTurn;
-    }
-
+    private int loopMove = 1;
     private boolean flagWhitePlayerTurn = true;
 
-    private final Map<Chessboard, TypeOfPiece> chessboardPieceMap = new LinkedHashMap<>();
-
-    private final Map<Integer, Map<Chessboard, TypeOfPiece> > historyChessboardPieceMap =
-            new LinkedHashMap<>();
+    private final List<String> algebraicNotationRegister = new LinkedList<>();
 
     public Game() {
 
@@ -40,14 +34,28 @@ public class Game {
         initWhiteTeam();
         initBlackTeam();
 
-        historyChessboardPieceMap.put(moveCounter, chessboardPieceMap);
-
     }
 
-    public Integer incrementMoveCounter() {
-        return this.moveCounter++;
+    public Integer incrementLoopMoveCounter() {
+        return this.loopMove++;
     }
 
+    public void setFlagWhitePlayerTurn(boolean flagWhitePlayerTurn) {
+        this.flagWhitePlayerTurn = flagWhitePlayerTurn;
+    }
+
+    public List<String> getAlgebraicNotationRegister() {
+        return algebraicNotationRegister;
+    }
+
+    public String printAlgebraicNotationRegister() {
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(algebraicNotationRegister.get(0) +" ");
+        algebraicNotationRegister.stream().skip(1).forEach(notation->stringBuilder.append(notation +" "));
+        return stringBuilder.toString().trim();
+
+    }
 
     private void initBlackTeam() {
         this.chessboardPieceMap.put(Chessboard.A8, BLACK_ROOK);

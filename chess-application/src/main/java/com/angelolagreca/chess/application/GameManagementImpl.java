@@ -8,6 +8,7 @@ import org.springframework.stereotype.*;
 
 import static com.angelolagreca.chess.domain.Chessboard.D2;
 import static com.angelolagreca.chess.domain.piece.TypeOfPiece.*;
+import static com.angelolagreca.chess.domain.vo.Color.WHITE;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
@@ -32,9 +33,8 @@ public class GameManagementImpl implements GameManagement {
     public Game playerMove(Game game, Chessboard actualPosition, Chessboard targetPosition) throws PieceMovementException {
 
         TypeOfPiece pieceToMove = determineThePieceToMove(game, actualPosition);
-        moveThePiece(game, actualPosition, targetPosition, pieceToMove);
 
-        saveMoveIntoHistoricalOfThisGame(game);
+        moveThePiece(game, actualPosition, targetPosition, pieceToMove);
 
         return game;
     }
@@ -49,8 +49,54 @@ public class GameManagementImpl implements GameManagement {
 
         checkIfIsPlayerTurn(game, pieceToMove, actualPosition);
         checkIfMovementIsPossible(pieceToMove, game, actualPosition, targetPosition);
+        TypeOfPiece capturedPiece = checkIfCapture(game, targetPosition);
+
         game.getChessboardPieceMap().put(actualPosition, EMPTY);
         game.getChessboardPieceMap().put(targetPosition, pieceToMove);
+
+        if (capturedPiece != null) {
+            registerCapturedPiece(game, capturedPiece);
+        }
+
+        addMoveToAlgebraicNotationRegister(game, pieceToMove, actualPosition,  targetPosition, capturedPiece);
+
+
+    }
+
+    private static void registerCapturedPiece(Game game, TypeOfPiece capturedPiece) {
+        if (WHITE.equals(capturedPiece.getColor())) {
+            game.getBlackPlayerCaptureRegister().add(capturedPiece);
+        }else{
+            game.getWhitePlayerCaptureRegister().add(capturedPiece);
+        }
+    }
+
+    private static TypeOfPiece checkIfCapture(Game game, Chessboard targetPosition) {
+        if (game.getChessboardPieceMap().get(targetPosition) != EMPTY) {
+            return game.getChessboardPieceMap().get(targetPosition);
+        }
+        return null;
+    }
+
+
+    private static void addMoveToAlgebraicNotationRegister(Game game, TypeOfPiece pieceToMove,
+                                                           Chessboard actualPosition, Chessboard targetPosition, TypeOfPiece capturedPiece) {
+        if (WHITE.name().equals(pieceToMove.getColor().toString())) {
+            game.getAlgebraicNotationRegister().add(game.getLoopMove() + ".");
+        }
+        if(capturedPiece != null ){
+            if (WHITE_PAWN.equals(pieceToMove) || BLACK_PAWN.equals(pieceToMove)) {
+                game.getAlgebraicNotationRegister().add((char)actualPosition.getPosition().getX()
+                        + "x" + targetPosition.name().toLowerCase());
+            }
+
+            game.getAlgebraicNotationRegister().add(pieceToMove.getAlgebraicNotationName()
+                    + "x" + targetPosition.name().toLowerCase());
+        }else {
+            game.getAlgebraicNotationRegister().add(pieceToMove.getAlgebraicNotationName()
+                    + targetPosition.name().toLowerCase());
+        }
+
     }
 
     private static void checkIfIsPlayerTurn(Game game, TypeOfPiece pieceToMove, Chessboard actualPosition)
@@ -59,10 +105,11 @@ public class GameManagementImpl implements GameManagement {
         if (EMPTY.equals(pieceToMove)) {
             throw new PieceMovementException("Wrong movement: chessboard position " + actualPosition + " is EMPTY");
         }
-        if (pieceToMove.getColor() == Color.WHITE && game.isFlagWhitePlayerTurn()) {
+        if (pieceToMove.getColor() == WHITE && game.isFlagWhitePlayerTurn()) {
             game.setFlagWhitePlayerTurn(false);
         } else if (pieceToMove.getColor() == Color.BLACK && !game.isFlagWhitePlayerTurn()) {
             game.setFlagWhitePlayerTurn(true);
+            game.incrementLoopMoveCounter();
         } else {
             throw new PieceMovementException("Is not turn of " + pieceToMove.getColor() + " player");
         }
@@ -181,10 +228,6 @@ public class GameManagementImpl implements GameManagement {
                 || BLACK_KNIGHT.equals(game.getChessboardPieceMap().get(actualPosition));
     }
 
-
-    private static void saveMoveIntoHistoricalOfThisGame(Game game) {
-        game.getHistoryChessboardPieceMap().put(game.incrementMoveCounter(), game.getChessboardPieceMap());
-    }
 
     private static void initBlackTeam(Game game) {
         game.getChessboardPieceMap().put(Chessboard.A8, BLACK_ROOK);

@@ -9,8 +9,10 @@ import org.springframework.boot.test.context.*;
 
 import static com.angelolagreca.chess.domain.Chessboard.*;
 import static com.angelolagreca.chess.domain.piece.TypeOfPiece.*;
+import static com.angelolagreca.chess.domain.vo.Color.BLACK;
 import static com.angelolagreca.chess.domain.vo.Color.WHITE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(classes = GameManagementImpl.class)
 class GameManagementImplTest {
@@ -335,6 +337,34 @@ class GameManagementImplTest {
         gameManagement.playerMove(game, B1, C3);
 
         assertEquals(WHITE_KNIGHT, game.getChessboardPieceMap().get(C3));
+
+    }
+
+    @Test
+    void register_of_capture_should_be_empty_when_no_piece_has_been_captured() throws PieceMovementException {
+
+        Game game = gameManagement.init();
+        makeAMovementToEnsureTheRotationOfThePlayersColor(WHITE, game);
+        makeAMovementToEnsureTheRotationOfThePlayersColor(BLACK, game);
+
+        assertTrue(game.getBlackPlayerCaptureRegister().isEmpty());
+        assertTrue(game.getWhitePlayerCaptureRegister().isEmpty());
+
+
+    }
+
+    @Test
+    void in_register_of_white_player_capture_should_be_a_black_white_knight_capture_it() throws PieceMovementException {
+
+        Game game = gameManagement.init();
+        gameManagement.playerMove(game, B1, C3);
+        gameManagement.playerMove(game, B7, B5);
+
+        gameManagement.playerMove(game, C3, B5);
+
+        assertEquals(BLACK_PAWN, game.getWhitePlayerCaptureRegister().get(0));
+        assertTrue(game.getBlackPlayerCaptureRegister().isEmpty());
+
 
     }
 
