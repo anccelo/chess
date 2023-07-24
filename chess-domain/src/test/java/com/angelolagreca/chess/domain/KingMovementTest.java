@@ -10,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class KingMovementTest {
 
-    private Chessboard initialPoistion;
-    private Chessboard finalPosition;
+    private Chessboard actualPosition;
+    private Chessboard targetPosition;
     private Movement movement;
     private final Game game = new Game();
 
@@ -19,31 +19,31 @@ class KingMovementTest {
     @Test
     void when_king_tries_move_without_change_position_it_should_return_false() {
         movement = new Movement(WHITE_KING, game);
-        initialPoistion = A1;
-        finalPosition = A1;
+        actualPosition = A1;
+        targetPosition = A1;
 
-        boolean actual = movement.isAllowed(initialPoistion, finalPosition);
+        boolean actual = movement.isAllowed(game, actualPosition, targetPosition);
         assertFalse(actual);
     }
 
     @Test
     void kingMovement_should_return_false_when_moving_for_two_horizontal_case() {
-        initialPoistion = E8;
-        finalPosition = C8;
+        actualPosition = E8;
+        targetPosition = C8;
         movement = new Movement(WHITE_KING, game);
 
-        boolean actual = movement.isAllowed(initialPoistion, finalPosition);
+        boolean actual = movement.isAllowed(game, actualPosition, targetPosition);
 
         assertFalse(actual);
     }
 
     @Test
     void kingMovement_should_return_false_whene_moving_for_two_vertical_case() {
-        initialPoistion = E8;
-        finalPosition = E6;
+        actualPosition = E8;
+        targetPosition = E6;
         movement = new Movement(WHITE_KING, game);
 
-        boolean actual = movement.isAllowed(initialPoistion, finalPosition);
+        boolean actual = movement.isAllowed(game, actualPosition, targetPosition);
 
         assertFalse(actual);
 
@@ -52,10 +52,10 @@ class KingMovementTest {
     @Test
     void kingMovement_should_return_true_when_there_is_a_single_diagonal_movement() {
         movement = new Movement(WHITE_KING, game);
-        initialPoistion = E8;
-        finalPosition = D7;
+        actualPosition = E8;
+        targetPosition = D7;
 
-        boolean actual = movement.isAllowed(initialPoistion, finalPosition);
+        boolean actual = movement.isAllowed(game, actualPosition, targetPosition);
 
         assertTrue(actual);
 

@@ -354,7 +354,8 @@ class GameManagementImplTest {
     }
 
     @Test
-    void in_register_of_white_player_capture_should_be_a_black_white_knight_capture_it() throws PieceMovementException {
+    void in_register_of_white_player_capture_should_be_a_black_pawn_when_white_knight_capture_it()
+            throws PieceMovementException {
 
         Game game = gameManagement.init();
         gameManagement.playerMove(game, B1, C3);
@@ -365,7 +366,33 @@ class GameManagementImplTest {
         assertEquals(BLACK_PAWN, game.getWhitePlayerCaptureRegister().get(0));
         assertTrue(game.getBlackPlayerCaptureRegister().isEmpty());
 
+    }
 
+    @Test
+    void in_register_of_white_player_capture_should_be_a_black_pawn_when_white_pawn_capture_it()
+            throws PieceMovementException {
+        Game game = gameManagement.init();
+        gameManagement.playerMove(game, A2, A4);
+        gameManagement.playerMove(game, B7, B5);
+
+        gameManagement.playerMove(game, A4, B5);
+
+        assertEquals(BLACK_PAWN, game.getWhitePlayerCaptureRegister().get(0));
+        assertTrue(game.getBlackPlayerCaptureRegister().isEmpty());
+    }
+
+    @Test
+    void in_register_of_black_player_capture_should_be_a_white_pawn_when_white_pawn_capture_it()
+            throws PieceMovementException {
+        Game game = gameManagement.init();
+        gameManagement.playerMove(game, A2, A4);
+        gameManagement.playerMove(game, B7, B5);
+
+        gameManagement.playerMove(game, H2, H3);
+        gameManagement.playerMove(game, B5, A4);
+
+        assertEquals(WHITE_PAWN, game.getBlackPlayerCaptureRegister().get(0));
+        assertTrue(game.getWhitePlayerCaptureRegister().isEmpty());
     }
 
     private void makeAMovementToEnsureTheRotationOfThePlayersColor(Color color, Game game)

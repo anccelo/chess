@@ -21,7 +21,7 @@ class BishopMovementTest {
         actualPosition = C1;
         targetPosition = C3;
 
-        boolean actual = movement.isAllowed(actualPosition, targetPosition);
+        boolean actual = movement.isAllowed(game, actualPosition, targetPosition);
 
         assertFalse(actual);
     }
@@ -32,7 +32,7 @@ class BishopMovementTest {
         actualPosition = C1;
         targetPosition = A1;
 
-        boolean actual = movement.isAllowed(actualPosition, targetPosition);
+        boolean actual = movement.isAllowed(game, actualPosition, targetPosition);
 
         assertFalse(actual);
     }
@@ -43,7 +43,7 @@ class BishopMovementTest {
         actualPosition = C1;
         targetPosition = A3;
 
-        boolean actual = movement.isAllowed(actualPosition, targetPosition);
+        boolean actual = movement.isAllowed(game, actualPosition, targetPosition);
 
         assertTrue(actual);
     }
@@ -54,7 +54,7 @@ class BishopMovementTest {
         actualPosition = C1;
         targetPosition = A1;
 
-        boolean actual = movement.isAllowed(actualPosition, targetPosition);
+        boolean actual = movement.isAllowed(game, actualPosition, targetPosition);
 
         assertFalse(actual);
     }
@@ -65,7 +65,7 @@ class BishopMovementTest {
         actualPosition = A3;
         targetPosition = B2;
 
-        boolean actual = movement.isAllowed(actualPosition, targetPosition);
+        boolean actual = movement.isAllowed(game, actualPosition, targetPosition);
 
         assertTrue(actual);
     }

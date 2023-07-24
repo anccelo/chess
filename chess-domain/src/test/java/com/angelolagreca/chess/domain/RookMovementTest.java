@@ -20,7 +20,7 @@ class RookMovementTest {
         actualPosition = C1;
         targetPosition = A3;
 
-        boolean actual = movement.isAllowed(actualPosition, targetPosition);
+        boolean actual = movement.isAllowed(game, actualPosition, targetPosition);
 
         assertFalse(actual);
     }
@@ -31,7 +31,7 @@ class RookMovementTest {
         actualPosition = A1;
         targetPosition = A3;
 
-        boolean actual = movement.isAllowed(actualPosition, targetPosition);
+        boolean actual = movement.isAllowed(game, actualPosition, targetPosition);
 
         assertTrue(actual);
     }
@@ -42,7 +42,7 @@ class RookMovementTest {
         actualPosition = C1;
         targetPosition = A1;
 
-        boolean actual = movement.isAllowed(actualPosition, targetPosition);
+        boolean actual = movement.isAllowed(game, actualPosition, targetPosition);
 
         assertTrue(actual);
     }
@@ -52,7 +52,7 @@ class RookMovementTest {
         actualPosition = A1;
         targetPosition = D5;
 
-        boolean actual = movement.isAllowed(actualPosition, targetPosition);
+        boolean actual = movement.isAllowed(game, actualPosition, targetPosition);
 
         assertFalse(actual);
     }
@@ -63,7 +63,7 @@ class RookMovementTest {
         actualPosition = A8;
         targetPosition = A1;
 
-        boolean actual = movement.isAllowed(actualPosition, targetPosition);
+        boolean actual = movement.isAllowed(game, actualPosition, targetPosition);
 
         assertTrue(actual);
     }
@@ -74,7 +74,7 @@ class RookMovementTest {
         actualPosition = C1;
         targetPosition = A1;
 
-        boolean actual = movement.isAllowed(actualPosition, targetPosition);
+        boolean actual = movement.isAllowed(game, actualPosition, targetPosition);
 
         assertTrue(actual);
     }

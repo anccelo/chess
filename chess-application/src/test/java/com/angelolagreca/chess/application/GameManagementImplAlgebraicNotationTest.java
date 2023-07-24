@@ -50,19 +50,28 @@ class GameManagementImplAlgebraicNotationTest {
         gameManagement.playerMove(game, G1, F3);
 
         assertEquals("1. a3 Na6 2. Nf3", game.printAlgebraicNotationRegister());
-
     }
 
     @Test
-    void there_should_be_an_x_when_a_pawn_move_capture_a_piece() throws PieceMovementException {
+    void there_should_be_ax_when_a_pawn_move_capture_a_piece_from_a_line() throws PieceMovementException {
         Game game = gameManagement.init();
         gameManagement.playerMove(game, A2, A4);
         gameManagement.playerMove(game, B7, B5);
 
-        //todo: pawn capture
         gameManagement.playerMove(game, A4, B5);
 
         assertEquals("1. a4 b5 2. axb5", game.printAlgebraicNotationRegister());
+    }
+
+    @Test
+    void there_should_be_cx_when_a_pawn_move_capture_c_piece_from_a_line() throws PieceMovementException {
+        Game game = gameManagement.init();
+        gameManagement.playerMove(game, C2, C4);
+        gameManagement.playerMove(game, B7, B5);
+
+        gameManagement.playerMove(game, C4, B5);
+
+        assertEquals("1. c4 b5 2. cxb5", game.printAlgebraicNotationRegister());
 
     }
 
@@ -75,6 +84,19 @@ class GameManagementImplAlgebraicNotationTest {
         gameManagement.playerMove(game, C3, B5);
 
         assertEquals("1. Nc3 b5 2. Nxb5", game.printAlgebraicNotationRegister());
+
+    }
+
+    @Test
+    void there_should_be_bxa4_when_a_black_pawn_capture_a_white_piece() throws PieceMovementException {
+        Game game = gameManagement.init();
+        gameManagement.playerMove(game, A2, A4);
+        gameManagement.playerMove(game, B7, B5);
+        gameManagement.playerMove(game, H2, H3);
+
+        gameManagement.playerMove(game, B5, A4);
+
+        assertEquals("1. a4 b5 2. h3 bxa4", game.printAlgebraicNotationRegister());
 
     }
 

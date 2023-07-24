@@ -21,7 +21,7 @@ class KnightMovementTest {
         actualPosition = C1;
         targetPosition = C1;
 
-        boolean actual = movement.isAllowed(actualPosition, targetPosition);
+        boolean actual = movement.isAllowed(game, actualPosition, targetPosition);
 
         assertFalse(actual);
     }
@@ -31,7 +31,7 @@ class KnightMovementTest {
         actualPosition = C1;
         targetPosition = A3;
 
-        boolean actual = movement.isAllowed(actualPosition, targetPosition);
+        boolean actual = movement.isAllowed(game, actualPosition, targetPosition);
 
         assertFalse(actual);
     }
@@ -42,7 +42,7 @@ class KnightMovementTest {
         actualPosition = C1;
         targetPosition = C2;
 
-        boolean actual = movement.isAllowed(actualPosition, targetPosition);
+        boolean actual = movement.isAllowed(game, actualPosition, targetPosition);
 
         assertFalse(actual);
     }
@@ -53,7 +53,7 @@ class KnightMovementTest {
         actualPosition = B1;
         targetPosition = C2;
 
-        boolean actual = movement.isAllowed(actualPosition, targetPosition);
+        boolean actual = movement.isAllowed(game, actualPosition, targetPosition);
 
         assertFalse(actual);
     }
@@ -64,7 +64,7 @@ class KnightMovementTest {
         actualPosition = B1;
         targetPosition = A3;
 
-        boolean actual = movement.isAllowed(actualPosition, targetPosition);
+        boolean actual = movement.isAllowed(game, actualPosition, targetPosition);
 
         assertTrue(actual);
     }
@@ -75,7 +75,7 @@ class KnightMovementTest {
         actualPosition = A3;
         targetPosition = B1;
 
-        boolean actual = movement.isAllowed(actualPosition, targetPosition);
+        boolean actual = movement.isAllowed(game, actualPosition, targetPosition);
 
         assertTrue(actual);
     }
@@ -87,7 +87,7 @@ class KnightMovementTest {
         actualPosition = H8;
         targetPosition = H6;
 
-        boolean actual = movement.isAllowed(actualPosition, targetPosition);
+        boolean actual = movement.isAllowed(game, actualPosition, targetPosition);
 
         assertFalse(actual);
     }

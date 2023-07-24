@@ -49,6 +49,7 @@ public class GameManagementImpl implements GameManagement {
 
         checkIfIsPlayerTurn(game, pieceToMove, actualPosition);
         checkIfMovementIsPossible(pieceToMove, game, actualPosition, targetPosition);
+
         TypeOfPiece capturedPiece = checkIfCapture(game, targetPosition);
 
         game.getChessboardPieceMap().put(actualPosition, EMPTY);
@@ -86,12 +87,12 @@ public class GameManagementImpl implements GameManagement {
         }
         if(capturedPiece != null ){
             if (WHITE_PAWN.equals(pieceToMove) || BLACK_PAWN.equals(pieceToMove)) {
-                game.getAlgebraicNotationRegister().add((char)actualPosition.getPosition().getX()
+                game.getAlgebraicNotationRegister().add((char) (actualPosition.getPosition().getX()+96)
+                        + "x" + targetPosition.name().toLowerCase());
+            }else {
+                game.getAlgebraicNotationRegister().add(pieceToMove.getAlgebraicNotationName()
                         + "x" + targetPosition.name().toLowerCase());
             }
-
-            game.getAlgebraicNotationRegister().add(pieceToMove.getAlgebraicNotationName()
-                    + "x" + targetPosition.name().toLowerCase());
         }else {
             game.getAlgebraicNotationRegister().add(pieceToMove.getAlgebraicNotationName()
                     + targetPosition.name().toLowerCase());
@@ -117,13 +118,13 @@ public class GameManagementImpl implements GameManagement {
     }
 
     private static void checkIfMovementIsPossible(TypeOfPiece pieceToMove, Game game, Chessboard actualPosition,
-                                                  Chessboard targetPosition) throws PieceMovementException {
+                                                  Chessboard targetPosition) throws PieceMovementException{
 
 
         Movement movement = new Movement(pieceToMove, game);
 
         if (movement.isTargetPositionOccupiedByAPieceOfItsOwnColour(actualPosition, targetPosition)
-                || !movement.isAllowed(actualPosition, targetPosition)
+                || !movement.isAllowed(game, actualPosition, targetPosition)
                 || !theWayOnTheChessboardIsFree(game, actualPosition, targetPosition)) {
 
             throw new PieceMovementException("Movement is not possible.");
