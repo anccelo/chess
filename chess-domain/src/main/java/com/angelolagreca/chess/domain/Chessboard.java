@@ -1,5 +1,7 @@
 package com.angelolagreca.chess.domain;
 
+import com.angelolagreca.chess.domain.exception.UnexpectedError;
+import com.angelolagreca.chess.domain.piece.TypeOfPiece;
 import com.angelolagreca.chess.domain.vo.Position;
 import lombok.Getter;
 
@@ -36,5 +38,7 @@ public enum Chessboard {
         }
         throw new EnumConstantNotPresentException(Chessboard.class,null);
     }
+
+
 
 }

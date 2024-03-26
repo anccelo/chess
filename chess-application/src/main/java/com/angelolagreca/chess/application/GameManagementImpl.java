@@ -1,14 +1,21 @@
 package com.angelolagreca.chess.application;
 
-import com.angelolagreca.chess.domain.*;
-import com.angelolagreca.chess.domain.exception.*;
-import com.angelolagreca.chess.domain.piece.*;
-import com.angelolagreca.chess.domain.vo.*;
-import org.springframework.stereotype.*;
+import com.angelolagreca.chess.domain.Chessboard;
+import com.angelolagreca.chess.domain.Game;
+import com.angelolagreca.chess.domain.Movement;
+import com.angelolagreca.chess.domain.exception.PieceMovementException;
+import com.angelolagreca.chess.domain.exception.UnexpectedError;
+import com.angelolagreca.chess.domain.piece.TypeOfPiece;
+import com.angelolagreca.chess.domain.vo.Color;
+import com.angelolagreca.chess.domain.vo.Position;
+import org.springframework.stereotype.Component;
+
+import java.util.Collection;
+import java.util.Map;
 
 import static com.angelolagreca.chess.domain.Chessboard.D2;
 import static com.angelolagreca.chess.domain.piece.TypeOfPiece.*;
-import static com.angelolagreca.chess.domain.vo.Color.WHITE;
+import static com.angelolagreca.chess.domain.vo.Color.*;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
@@ -49,6 +56,7 @@ public class GameManagementImpl implements GameManagement {
 
         checkIfIsPlayerTurn(game, pieceToMove, actualPosition);
         checkIfMovementIsPossible(pieceToMove, game, actualPosition, targetPosition);
+        checkIfWithMovementOwnKingIsInCheck(game, pieceToMove, actualPosition);
 
         TypeOfPiece capturedPiece = checkIfCapture(game, targetPosition);
 
@@ -59,15 +67,70 @@ public class GameManagementImpl implements GameManagement {
             registerCapturedPiece(game, capturedPiece);
         }
 
-        addMoveToAlgebraicNotationRegister(game, pieceToMove, actualPosition,  targetPosition, capturedPiece);
+        addMoveToAlgebraicNotationRegister(game, pieceToMove, actualPosition, targetPosition, capturedPiece);
 
+    }
+
+    private static void checkIfWithMovementOwnKingIsInCheck(Game game, TypeOfPiece pieceToMove,
+                                                            Chessboard actualPosition) throws PieceMovementException {
+        game.getChessboardPieceMap().put(actualPosition, EMPTY);
+        Chessboard kingPosition = getThePositionOfOwnKing(game, pieceToMove.getColor());
+
+        Color opponentSColor = getOppenentColor(pieceToMove);
+        Collection<TypeOfPiece> pieces = game.getChessboardPieceMap().values();
+
+        for (TypeOfPiece piece : pieces) {
+            if (opponentSColor.equals(piece.getColor())) {
+                Chessboard piecePosition = getPositionOfPiece(game, piece);
+
+                try {
+                    checkIfMovementIsPossible(piece, game, piecePosition,
+                            kingPosition);
+                } catch (PieceMovementException exception) {
+                    continue;
+                }
+
+                throw new PieceMovementException("King in check with this move");
+            }
+        }
+        game.getChessboardPieceMap().put(actualPosition, pieceToMove);
+
+    }
+
+    private static Chessboard getThePositionOfOwnKing(Game game, Color colorOfTurn) {
+        if (colorOfTurn == WHITE) {
+            return getPositionOfPiece(game, WHITE_KING);
+        } else {
+            return getPositionOfPiece(game, BLACK_KING);
+        }
+    }
+
+    private static Chessboard getPositionOfPiece(Game game, TypeOfPiece typeOfPiece) {
+        for (Map.Entry<Chessboard, TypeOfPiece> entry : game.getChessboardPieceMap().entrySet()) {
+            if (entry.getValue().equals(typeOfPiece)) {
+                return entry.getKey();
+            }
+        }
+        throw new UnexpectedError("Type of piece not found.");
+    }
+
+
+    private static Color getOppenentColor(TypeOfPiece pieceToMove) {
+        Color pieceToMoveColor = pieceToMove.getColor();
+        if (NO_COLOR.equals(pieceToMoveColor)) {
+            throw new UnexpectedError("Attempt to move an empty case.");
+        }
+        if (BLACK.equals(pieceToMoveColor)) {
+            return WHITE;
+        }
+        return BLACK;
 
     }
 
     private static void registerCapturedPiece(Game game, TypeOfPiece capturedPiece) {
         if (WHITE.equals(capturedPiece.getColor())) {
             game.getBlackPlayerCaptureRegister().add(capturedPiece);
-        }else{
+        } else {
             game.getWhitePlayerCaptureRegister().add(capturedPiece);
         }
     }
@@ -85,15 +148,15 @@ public class GameManagementImpl implements GameManagement {
         if (WHITE.name().equals(pieceToMove.getColor().toString())) {
             game.getAlgebraicNotationRegister().add(game.getLoopMove() + ".");
         }
-        if(capturedPiece != null ){
+        if (capturedPiece != null) {
             if (WHITE_PAWN.equals(pieceToMove) || BLACK_PAWN.equals(pieceToMove)) {
-                game.getAlgebraicNotationRegister().add((char) (actualPosition.getPosition().getX()+96)
+                game.getAlgebraicNotationRegister().add((char) (actualPosition.getPosition().getX() + 96)
                         + "x" + targetPosition.name().toLowerCase());
-            }else {
+            } else {
                 game.getAlgebraicNotationRegister().add(pieceToMove.getAlgebraicNotationName()
                         + "x" + targetPosition.name().toLowerCase());
             }
-        }else {
+        } else {
             game.getAlgebraicNotationRegister().add(pieceToMove.getAlgebraicNotationName()
                     + targetPosition.name().toLowerCase());
         }
@@ -118,7 +181,7 @@ public class GameManagementImpl implements GameManagement {
     }
 
     private static void checkIfMovementIsPossible(TypeOfPiece pieceToMove, Game game, Chessboard actualPosition,
-                                                  Chessboard targetPosition) throws PieceMovementException{
+                                                  Chessboard targetPosition) throws PieceMovementException {
 
 
         Movement movement = new Movement(pieceToMove, game);

@@ -15,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest(classes = GameManagementImpl.class)
 class GameManagementImplAlgebraicNotationTest {
 
-
     @Autowired
     GameManagement gameManagement;
 

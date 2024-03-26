@@ -61,6 +61,17 @@ class QueenMovementTest {
         assertTrue(actual);
     }
 
+    @Test
+    void should_return_false_when_black_queen_move_directly_in_whith_king_initial_position() {
+        actualPosition = D8;
+        targetPosition = E1;
+        movement = new Movement(WHITE_QUEEN, game);
+
+        boolean actual = movement.isAllowed(game, actualPosition, targetPosition);
+
+        assertFalse(actual);
+    }
+
 
     @Test
     void should_return_false_when_white_queen_move_from_E1_to_D8() {
