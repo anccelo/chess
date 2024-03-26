@@ -1,7 +1,7 @@
 package com.angelolagreca.chess.domain;
 
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static com.angelolagreca.chess.domain.Chessboard.*;
 import static com.angelolagreca.chess.domain.piece.TypeOfPiece.WHITE_KING;
@@ -61,5 +61,15 @@ class KingMovementTest {
 
     }
 
+    @Test
+    void should_return_false_when_white_king_move_from_D1_to_H5() {
+        actualPosition = D1;
+        targetPosition = H5;
+        movement = new Movement(WHITE_KING, game);
+
+        boolean actual = movement.isAllowed(game, actualPosition, targetPosition);
+
+        assertFalse(actual);
+    }
 
 }

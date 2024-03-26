@@ -1,7 +1,7 @@
 package com.angelolagreca.chess.domain;
 
-import com.angelolagreca.chess.domain.piece.TypeOfPiece;
-import com.angelolagreca.chess.domain.vo.Color;
+import com.angelolagreca.chess.domain.piece.*;
+import com.angelolagreca.chess.domain.vo.*;
 
 public class Movement {
 
@@ -20,7 +20,7 @@ public class Movement {
                 return kingMovement(actualPosition, targetPosition);
             case WHITE_QUEEN:
             case BLACK_QUEEN:
-                return true;
+                return queenMovement(actualPosition, targetPosition);
             case WHITE_BISHOP:
             case BLACK_BISHOP:
                 return bishopMovement(actualPosition, targetPosition);
@@ -49,14 +49,11 @@ public class Movement {
     }
 
     private boolean kingMovement(Chessboard actualPosition, Chessboard targetPosition) {
-        if (itHasntMoved(actualPosition, targetPosition)) return false;
 
         int checkX = getHowManyHorizontalPositionsThePieceWantsToMove(actualPosition, targetPosition);
         int checkY = Math.abs(actualPosition.getPosition().getY() - targetPosition.getPosition().getY());
 
-        if (checkX > 1 || checkY > 1)
-            return checkX != 0 && checkY != 0;
-        return true;
+        return checkX <= 1 && checkY <= 1 && !itHasntMoved(actualPosition, targetPosition);
     }
 
     //pawnMovememnt
@@ -77,7 +74,7 @@ public class Movement {
             return false;
         if (TypeOfPiece.EMPTY.equals(game.getChessboardPieceMap().get(targetPosition))
                 && (isABlackPawnStartPosition(actualPosition))) {
-                return startBlackPawnMovement(game, actualPosition, targetPosition);
+            return startBlackPawnMovement(game, actualPosition, targetPosition);
 
         }
         return singleBlackPawnMovement(game, actualPosition, targetPosition);
@@ -173,6 +170,12 @@ public class Movement {
 
         return (checkX == 1 && checkY == 2 || checkY == 1 && checkX == 2);
 
+    }
+
+    private boolean queenMovement(Chessboard actualPosition, Chessboard newPosition) {
+        return kingMovement(actualPosition, newPosition)
+                || rookMovement(actualPosition, newPosition)
+                || bishopMovement(actualPosition, newPosition);
     }
 
 

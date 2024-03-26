@@ -1,11 +1,12 @@
 package com.angelolagreca.chess.domain;
 
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static com.angelolagreca.chess.domain.Chessboard.*;
 import static com.angelolagreca.chess.domain.piece.TypeOfPiece.BLACK_QUEEN;
 import static com.angelolagreca.chess.domain.piece.TypeOfPiece.WHITE_QUEEN;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
@@ -50,7 +51,7 @@ class QueenMovementTest {
     }
 
     @Test
-    void should_return_true_when_White_queen_move_one_position_horizontally() {
+    void should_return_true_when_white_queen_move_one_position_horizontally() {
         actualPosition = D4;
         targetPosition = D3;
         movement = new Movement(WHITE_QUEEN, game);
@@ -58,6 +59,18 @@ class QueenMovementTest {
         boolean actual = movement.isAllowed(game, actualPosition, targetPosition);
 
         assertTrue(actual);
+    }
+
+
+    @Test
+    void should_return_false_when_white_queen_move_from_E1_to_D8() {
+        actualPosition = E1;
+        targetPosition = D8;
+        movement = new Movement(WHITE_QUEEN, game);
+
+        boolean actual = movement.isAllowed(game, actualPosition, targetPosition);
+
+        assertFalse(actual);
     }
 
 
